@@ -17,6 +17,10 @@ import androidx.appcompat.app.AppCompatActivity
 
 class SearchActivity : AppCompatActivity() {
 
+    companion object{
+        var SEARCH_SAVE = ""
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +97,8 @@ class SearchActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
 
         val editTextSearch = findViewById<EditText>(R.id.search_edit_text)
-        outState.putString("SEARCH_TEXT", editTextSearch.text.toString())
+        SEARCH_SAVE = editTextSearch.text.toString()
+        outState.putString("SEARCH_TEXT", SEARCH_SAVE)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
