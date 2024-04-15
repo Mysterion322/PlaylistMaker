@@ -28,13 +28,12 @@ class SearchActivity : AppCompatActivity() {
         editTextSearch.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
 
         editTextSearch.setOnTouchListener(OnTouchListener { v, event ->
-            val DRAWABLE_LEFT = 0
-            val DRAWABLE_TOP = 1
-            val DRAWABLE_RIGHT = 2
-            val DRAWABLE_BOTTOM = 3
+
+            val drawableRight = 2
+
             if (event.action == MotionEvent.ACTION_UP) {
                 if (event.rawX >= editTextSearch.getRight() - editTextSearch.getCompoundDrawables()
-                        .get(DRAWABLE_RIGHT).getBounds().width()
+                        .get(drawableRight).getBounds().width()
                 ) {
                     editTextSearch.setText("")
                     editTextSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_small_image,0, R.drawable.search_image_layout, 0)
