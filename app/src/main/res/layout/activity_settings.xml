@@ -7,35 +7,30 @@
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
-        <LinearLayout
-            style="@style/TitleLayoutStyle"
-            tools:context=".SettingsActivity">
+    <LinearLayout
+        style="@style/TitleLayoutStyle"
+        tools:context=".SettingsActivity">
 
-            <ImageView
-                android:id="@+id/back_settings_image"
-                style="@style/BackImageStyle"
-                />
+        <ImageView
+            android:id="@+id/back_settings_image"
+            style="@style/BackImageStyle" />
 
         <TextView
-            android:text="@string/settings"
             style="@style/TitleText"
-            />
+            android:text="@string/settings" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/indent_layout">
-    </FrameLayout>
+        android:layout_height="@dimen/indent_layout"></FrameLayout>
 
-    <FrameLayout
-        style="@style/TextLayoutStyle">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:text="@string/dark_theme"
             style="@style/TextStyle"
-            />
+            android:text="@string/dark_theme" />
 
         <Switch
             android:id="@+id/switchDarkTheme"
@@ -46,13 +41,11 @@
             tools:ignore="UseSwitchCompatOrMaterialXml" />
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/TextLayoutStyle">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:text="@string/share"
             style="@style/TextStyle"
-            />
+            android:text="@string/share" />
 
         <ImageView
             android:id="@+id/imageShare"
@@ -61,28 +54,24 @@
 
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/TextLayoutStyle">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:text="@string/support"
             style="@style/TextStyle"
-            />
+            android:text="@string/support" />
 
         <ImageView
             android:id="@+id/image_support"
-            app:srcCompat="@drawable/support"
-            style="@style/SmallImageStyle"/>
+            style="@style/SmallImageStyle"
+            app:srcCompat="@drawable/support" />
 
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/TextLayoutStyle">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:text="@string/terms_of_use"
             style="@style/TextStyle"
-            />
+            android:text="@string/terms_of_use" />
 
         <ImageView
             android:id="@+id/image_terms_of_use"

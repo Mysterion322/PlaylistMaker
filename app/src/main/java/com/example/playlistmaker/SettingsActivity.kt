@@ -45,12 +45,13 @@ class SettingsActivity : AppCompatActivity() {
         val stringValueText = context.getString(R.string.support_text_message)
 
         buttonSupport.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO).apply {
+            Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:" + stringValueMail)
                 putExtra(Intent.EXTRA_SUBJECT, stringValueSubject)
                 putExtra(Intent.EXTRA_TEXT, stringValueText)
+                startActivity(this)
             }
-            startActivity(intent)
+            
         }
 
         val stringValueTermsOfUse = context.getString(R.string.uri_terms_of_use)

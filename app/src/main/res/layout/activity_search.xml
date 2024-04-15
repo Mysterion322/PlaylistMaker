@@ -7,28 +7,23 @@
     android:orientation="vertical"
     tools:context=".SearchActivity">
 
-    <LinearLayout
-        style="@style/TitleLayoutStyle">
+    <LinearLayout style="@style/TitleLayoutStyle">
 
         <ImageView
             android:id="@+id/back_search_image"
-            style="@style/BackImageStyle"
-            />
+            style="@style/BackImageStyle" />
 
         <TextView
-            android:text="@string/search"
             style="@style/TitleText"
-            />
+            android:text="@string/search" />
 
     </LinearLayout>
 
-    <FrameLayout
-        style="@style/SearchLayout">
+    <FrameLayout style="@style/SearchLayout">
 
         <EditText
             android:id="@+id/search_edit_text"
-            style="@style/SearchEditTextStyle"
-             />
+            style="@style/SearchEditTextStyle" />
 
     </FrameLayout>
 

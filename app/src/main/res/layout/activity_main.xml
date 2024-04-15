@@ -2,59 +2,56 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:background="?attr/colorPrimaryDark">
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimaryDark"
+    android:orientation="vertical">
 
 
-    <FrameLayout
-        style="@style/TitleLayoutStyle">
+    <FrameLayout style="@style/TitleLayoutStyle">
+
         <TextView
+            style="@style/TitleText"
             android:paddingLeft="@dimen/indent_normal"
             android:text="@string/main_name"
-            android:textColor="@color/white"
-            style="@style/TitleText"/>
+            android:textColor="@color/white" />
     </FrameLayout>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="8dp">
-    </FrameLayout>
-    <FrameLayout
-        style="@style/MainButtonLayoutStyle">
+        android:layout_height="8dp"></FrameLayout>
+
+    <FrameLayout style="@style/MainButtonLayoutStyle">
 
         <Button
             android:id="@+id/button_search"
+            style="@style/MainButtonStyle"
             android:text="@string/search"
-            app:icon="@drawable/search"
-            style="@style/MainButtonStyle"/>
+            app:icon="@drawable/search" />
 
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/MainButtonLayoutStyle">
+    <FrameLayout style="@style/MainButtonLayoutStyle">
 
-            <Button
-                android:id="@+id/button_media"
-                android:text="@string/media_library"
-                app:icon="@drawable/library"
-                style="@style/MainButtonStyle"/>
+        <Button
+            android:id="@+id/button_media"
+            style="@style/MainButtonStyle"
+            android:text="@string/media_library"
+            app:icon="@drawable/library" />
 
     </FrameLayout>
 
-    <FrameLayout
-        style="@style/MainButtonLayoutStyle">
+    <FrameLayout style="@style/MainButtonLayoutStyle">
 
-            <Button
-                android:id="@+id/button_settings"
-                android:text="@string/settings"
-                app:icon="@drawable/settings"
-                style="@style/MainButtonStyle"/>
+        <Button
+            android:id="@+id/button_settings"
+            style="@style/MainButtonStyle"
+            android:text="@string/settings"
+            app:icon="@drawable/settings" />
 
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/indent_layout">
-    </FrameLayout>
+        android:layout_height="@dimen/indent_layout"></FrameLayout>
 
 </LinearLayout>
