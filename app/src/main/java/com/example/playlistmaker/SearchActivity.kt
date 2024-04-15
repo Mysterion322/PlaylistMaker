@@ -17,10 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object{
-        var SEARCH_SAVE = ""
-    }
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,8 +84,7 @@ class SearchActivity : AppCompatActivity() {
         val buttonSettings = findViewById<ImageView>(R.id.back_search_image)
 
         buttonSettings.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
     }
@@ -97,15 +92,13 @@ class SearchActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
 
         val editTextSearch = findViewById<EditText>(R.id.search_edit_text)
-        SEARCH_SAVE = editTextSearch.text.toString()
-        outState.putString("SEARCH_TEXT", SEARCH_SAVE)
+        outState.putString("SEARCH_TEXT", editTextSearch.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
         val editTextSearch = findViewById<EditText>(R.id.search_edit_text)
-
         editTextSearch.setText(savedInstanceState.getString("SEARCH_TEXT", ""))
     }
 

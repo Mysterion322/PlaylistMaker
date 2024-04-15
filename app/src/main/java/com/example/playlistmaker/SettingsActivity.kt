@@ -19,8 +19,9 @@ class SettingsActivity : AppCompatActivity() {
         val buttonSettings = findViewById<ImageView>(R.id.back_settings_image)
 
         buttonSettings.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+         //   val displayIntent = Intent(this, MainActivity::class.java)
+        //  startActivity(displayIntent)
+            onBackPressedDispatcher.onBackPressed()
         }
 
         val buttonShare = findViewById<ImageView>(R.id.imageShare)
