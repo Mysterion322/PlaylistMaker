@@ -19,8 +19,6 @@ class SettingsActivity : AppCompatActivity() {
         val buttonSettings = findViewById<ImageView>(R.id.back_settings_image)
 
         buttonSettings.setOnClickListener {
-         //   val displayIntent = Intent(this, MainActivity::class.java)
-        //  startActivity(displayIntent)
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -51,7 +49,7 @@ class SettingsActivity : AppCompatActivity() {
                 putExtra(Intent.EXTRA_TEXT, stringValueText)
                 startActivity(this)
             }
-            
+
         }
 
         val stringValueTermsOfUse = context.getString(R.string.uri_terms_of_use)
