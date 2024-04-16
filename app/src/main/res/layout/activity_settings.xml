@@ -7,139 +7,75 @@
     android:orientation="vertical"
     tools:context=".SettingsActivity">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            tools:context=".SettingsActivity">
+    <LinearLayout
+        style="@style/TitleLayoutStyle"
+        tools:context=".SettingsActivity">
 
-            <ImageView
-                android:id="@+id/back_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/back"
-                android:paddingLeft="@dimen/indent_normal"
-                android:paddingRight="24dp"
-                />
+        <ImageView
+            android:id="@+id/back_settings_image"
+            style="@style/BackImageStyle" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:text="@string/settings"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_big"
-            />
+            style="@style/TitleText"
+            android:text="@string/settings" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="24dp">
-    </FrameLayout>
+        android:layout_height="@dimen/indent_layout"></FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/strings_indent">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:text="@string/dark_theme"
-            android:paddingLeft="@dimen/indent_normal"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_small"
-            />
+            style="@style/TextStyle"
+            android:text="@string/dark_theme" />
 
         <Switch
-            android:id="@+id/switch1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/indent_normal"
+            android:id="@+id/switchDarkTheme"
+            style="@style/SmallImageStyle"
             android:switchMinWidth="52dp"
+            android:thumbTint="?attr/colorSecondary"
+            android:trackTint="?attr/colorSecondary"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/strings_indent">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:text="@string/share"
-            android:paddingLeft="@dimen/indent_normal"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_small"
-            />
+            style="@style/TextStyle"
+            android:text="@string/share" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/indent_normal"
+            android:id="@+id/imageShare"
+            style="@style/SmallImageStyle"
             app:srcCompat="@drawable/share" />
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/strings_indent">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:text="@string/support"
-            android:paddingLeft="@dimen/indent_normal"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_small"
-            />
+            style="@style/TextStyle"
+            android:text="@string/support" />
 
         <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/indent_normal"
+            android:id="@+id/image_support"
+            style="@style/SmallImageStyle"
             app:srcCompat="@drawable/support" />
 
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/strings_indent">
+    <FrameLayout style="@style/TextLayoutStyle">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:gravity="center_vertical"
-            android:text="@string/terms_of_use"
-            android:paddingLeft="@dimen/indent_normal"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_small"
-            />
+            style="@style/TextStyle"
+            android:text="@string/terms_of_use" />
 
         <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="end"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/indent_normal"
+            android:id="@+id/image_terms_of_use"
+            style="@style/SmallImageStyle"
             app:srcCompat="@drawable/pointer" />
 
     </FrameLayout>
