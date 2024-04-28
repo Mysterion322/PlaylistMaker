@@ -40,14 +40,10 @@ class SearchActivity : AppCompatActivity() {
 
                     val view: View? = this.currentFocus
 
-                    // on below line checking if view is not null.
                     if (view != null) {
-                        // on below line we are creating a variable
-                        // for input manager and initializing it.
                         val inputMethodManager =
                             getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
-                        // on below line hiding our keyboard.
                         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
                     }
 
@@ -75,7 +71,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-              //  editTextSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_small_image,0, R.drawable.search_image_layout, 0)
                 // Здесь можно добавить любой нужный код после изменения текста
             }
         })
