@@ -2,7 +2,10 @@
 <resources>
     <dimen name="text_big">22sp</dimen>
     <dimen name="text_small">16sp</dimen>
+    <dimen name="text_music">14sp</dimen>
     <dimen name="indent_normal">16dp</dimen>
+    <dimen name="indent_music">8dp</dimen>
+    <dimen name="indent_music_card">12dp</dimen>
     <dimen name="button_radius">16dp</dimen>
     <dimen name="search_layout_radius">8dp</dimen>
     <dimen name="strings_layout_indent">60dp</dimen>
@@ -11,5 +14,7 @@
     <dimen name="indent_layout">24dp</dimen>
     <dimen name="search_layout_height">36dp</dimen>
     <dimen name="small_image">16dp</dimen>
+    <dimen name="music_image">45dp</dimen>
+
 
 </resources>
