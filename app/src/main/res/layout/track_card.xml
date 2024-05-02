@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -10,7 +11,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_track"
             style="@style/MusicCardImage"/>
 
         <LinearLayout
@@ -22,26 +23,26 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_track_name"
                 style="@style/MusicCardText"
-                android:text="TextViewWWWWWWWWWWwwwwwwww"
+                tools:text="TextView"
                 />
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/tv_track_artist"
                 style="@style/MusicCardText"
                 android:gravity="top"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="@dimen/text_music"
-                android:text="TextView" />
+                tools:text="TextView" />
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/image_terms_of_use2"
+            android:id="@+id/iv_terms_of_use"
             style="@style/SmallImageStyle"
             app:srcCompat="@drawable/pointer" />
 
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
