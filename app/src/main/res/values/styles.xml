@@ -90,7 +90,7 @@
         <item name="android:layout_width">@dimen/music_image</item>
         <item name="android:layout_height">@dimen/music_image</item>
         <item name="android:layout_gravity">center_vertical</item>
-        <item name="srcCompat">@drawable/musicicon2</item>
+        <item name="srcCompat">@drawable/placeholder</item>
     </style>
 
     <style name="SearchEditTextStyle">

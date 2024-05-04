@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    style="@style/TextLayoutStyle"
+    android:paddingStart="@dimen/indent_music_card"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        style="@style/TextLayoutStyle"
-        android:paddingStart="@dimen/indent_music_card">
-
-
-        <ImageView
-            android:id="@+id/iv_track"
-            style="@style/MusicCardImage"/>
+    <ImageView
+        android:id="@+id/iv_track"
+        style="@style/MusicCardImage" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -42,7 +37,4 @@
             style="@style/SmallImageStyle"
             app:srcCompat="@drawable/pointer" />
 
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>
