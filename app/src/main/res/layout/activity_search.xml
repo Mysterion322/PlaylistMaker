@@ -27,5 +27,17 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_track_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+
+
 </LinearLayout>
 
