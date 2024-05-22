@@ -76,7 +76,6 @@ class SearchActivity : AppCompatActivity() {
                         R.drawable.search_image_layout,
                         0
                     )
-                    text = EMPTY
                     trackList.clear()
                     notFound.visibility = View.GONE
                     noInternet.visibility = View.GONE
