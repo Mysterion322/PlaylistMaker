@@ -25,7 +25,7 @@
             android:id="@+id/search_edit_text"
             style="@style/SearchEditTextStyle"
             android:imeOptions="actionDone"
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
     </FrameLayout>
 
@@ -49,13 +49,11 @@
 
         <TextView
             android:id="@+id/tv_not_found"
-            android:text="@string/nothing_was_found"
             style="@style/ErrorSearchText"
-            />
-
+            android:text="@string/nothing_was_found" />
     </LinearLayout>
 
-<LinearLayout
+    <LinearLayout
         android:id="@+id/ll_no_internet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -63,22 +61,20 @@
         android:paddingTop="@dimen/error_search_image_indent"
         android:visibility="gone">
 
-    <ImageView
-        android:id="@+id/iv_no_internet"
-        style="@style/ErrorSearchImage"
-        app:srcCompat="@drawable/nointernet" />
+        <ImageView
+            android:id="@+id/iv_no_internet"
+            style="@style/ErrorSearchImage"
+            app:srcCompat="@drawable/nointernet" />
 
         <TextView
             android:id="@+id/tv_no_internet_top"
-            android:text="@string/communication_problems"
             style="@style/ErrorSearchText"
-            />
+            android:text="@string/communication_problems" />
 
         <TextView
             android:id="@+id/tv_no_internet"
-            android:text="@string/the_download_failed"
             style="@style/ErrorSearchText"
-            />
+            android:text="@string/the_download_failed" />
 
         <Button
             android:id="@+id/update_button"
@@ -86,14 +82,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/indent_layout"
-            android:text="@string/update"
             android:backgroundTint="?attr/colorPrimary"
-            app:cornerRadius="@dimen/error_button_radius"
             android:fontFamily="@font/ys_display_medium"
-            android:textColor="?attr/colorOnPrimary"
+            android:text="@string/update"
             android:textAllCaps="false"
-            android:textSize="@dimen/error_button_text"/>
-
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/error_button_text"
+            app:cornerRadius="@dimen/error_button_radius" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

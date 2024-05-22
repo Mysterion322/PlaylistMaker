@@ -63,7 +63,12 @@ class SearchActivity : AppCompatActivity() {
                         .get(drawableRight).getBounds().width()
                 ) {
                     editTextSearch.setText(EMPTY)
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_small_image,0, R.drawable.search_image_layout, 0)
+                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.search_small_image,
+                        0,
+                        R.drawable.search_image_layout,
+                        0
+                    )
                     trackList.clear()
                     notFound.visibility = View.GONE
                     noInternet.visibility = View.GONE
@@ -92,10 +97,20 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
-                if(editTextSearch.text.length==0){
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_small_image,0, R.drawable.search_image_layout, 0)
-                }else{
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_small_image,0, R.drawable.clear_small_image, 0)
+                if (editTextSearch.text.length == 0) {
+                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.search_small_image,
+                        0,
+                        R.drawable.search_image_layout,
+                        0
+                    )
+                } else {
+                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
+                        R.drawable.search_small_image,
+                        0,
+                        R.drawable.clear_small_image,
+                        0
+                    )
                 }
                 // Здесь можно добавить любой нужный код при изменении текста
             }
@@ -126,6 +141,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -142,7 +158,10 @@ class SearchActivity : AppCompatActivity() {
 
     fun apiRequest(text: String) {
         iTunesService.getTrack(text).enqueue(object : Callback<ResponseTracks> {
-            override fun onResponse(call: Call<ResponseTracks>, response: Response<ResponseTracks>) {
+            override fun onResponse(
+                call: Call<ResponseTracks>,
+                response: Response<ResponseTracks>
+            ) {
 
                 val tracksFromResp = response.body()?.results
 
@@ -159,7 +178,11 @@ class SearchActivity : AppCompatActivity() {
                         val rvTrackList = findViewById<RecyclerView>(R.id.rv_track_list)
                         rvTrackList.adapter = trackAdapter
                         rvTrackList.layoutManager =
-                            LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+                            LinearLayoutManager(
+                                this@SearchActivity,
+                                LinearLayoutManager.VERTICAL,
+                                false
+                            )
                     }
                 }
 
