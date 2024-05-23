@@ -30,8 +30,6 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var editTextSearch: EditText
     private lateinit var notFound: LinearLayout
-    private lateinit var notFoundIV: ImageView
-    private lateinit var noInternetIV: ImageView
     private lateinit var noInternet: LinearLayout
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
