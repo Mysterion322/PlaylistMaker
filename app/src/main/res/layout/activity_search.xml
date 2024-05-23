@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/indent_layout"
-            android:backgroundTint="?attr/colorPrimary"
+            android:backgroundTint="?attr/colorOnPrimaryFixed"
             android:fontFamily="@font/ys_display_medium"
             android:text="@string/update"
             android:textAllCaps="false"

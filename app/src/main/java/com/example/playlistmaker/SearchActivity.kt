@@ -166,23 +166,15 @@ class SearchActivity : AppCompatActivity() {
 
     fun apiRequest(text: String) {
         iTunesService.getTrack(text).enqueue(object : Callback<ResponseTracks> {
-            override fun onResponse(
-                call: Call<ResponseTracks>,
-                response: Response<ResponseTracks>
-            ) {
+            override fun onResponse(call: Call<ResponseTracks>, response: Response<ResponseTracks>) {
 
                 val tracksFromResp = response.body()?.results
 
                 if (response.isSuccessful && tracksFromResp != null) {
                     if (tracksFromResp.isEmpty()) {
-                        if(resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                            notFoundIV.setImageResource(R.drawable.notfounddark)
-                        }else{
-                            notFoundIV.setImageResource(R.drawable.notfound)
-                        }
+                        trackList.clear()
                         noInternet.visibility = View.GONE
                         notFound.visibility = View.VISIBLE
-                        trackList.clear()
                     } else {
                         trackList.clear()
                         trackList.addAll(tracksFromResp.toMutableList())
@@ -204,11 +196,6 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(p0: Call<ResponseTracks>, p1: Throwable) {
                 trackList.clear()
                 notFound.visibility = View.GONE
-                if(resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES){
-                    noInternetIV.setImageResource(R.drawable.nointernetdark)
-                }else{
-                    noInternetIV.setImageResource(R.drawable.nointernet)
-                }
                 noInternet.visibility = View.VISIBLE
 
             }
