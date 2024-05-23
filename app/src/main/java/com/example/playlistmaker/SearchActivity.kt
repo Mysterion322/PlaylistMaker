@@ -55,8 +55,6 @@ class SearchActivity : AppCompatActivity() {
         editTextSearch = findViewById<EditText>(R.id.search_edit_text)
         notFound = findViewById<LinearLayout>(R.id.ll_not_found)
         noInternet = findViewById<LinearLayout>(R.id.ll_no_internet)
-        notFoundIV = findViewById<ImageView>(R.id.iv_not_found)
-        noInternetIV = findViewById<ImageView>(R.id.iv_no_internet)
         val updateButton = findViewById<Button>(R.id.update_button)
 
         editTextSearch.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
