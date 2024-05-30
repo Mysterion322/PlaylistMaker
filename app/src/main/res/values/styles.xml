@@ -45,6 +45,17 @@
         <item name="android:singleLine">true</item>
         <item name="android:maxLines">1</item>
     </style>
+    <style name="ErrorSearchText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">@dimen/error_search_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:layout_marginTop">@dimen/indent_normal</item>
+    </style>
 
     <style name="MainButtonLayoutStyle">
         <item name="android:layout_width">match_parent</item>
@@ -91,6 +102,11 @@
         <item name="android:layout_height">@dimen/music_image</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="srcCompat">@drawable/placeholder</item>
+    </style>
+    <style name="ErrorSearchImage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
     </style>
 
     <style name="SearchEditTextStyle">

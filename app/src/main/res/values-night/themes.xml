@@ -15,5 +15,9 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <!-- Customize your theme here. -->
+        <item name="colorOnPrimaryFixed">@color/white</item>
+
+        <item name="colorOnPrimaryFixedVariant">@color/search_layout_color</item>
+        <item name="colorOnPrimarySurface">@color/grey</item>
     </style>
 </resources>
