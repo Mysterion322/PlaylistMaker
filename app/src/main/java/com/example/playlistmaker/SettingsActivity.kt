@@ -62,11 +62,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val switchDarkTheme = findViewById<Switch>(R.id.switchDarkTheme)
-        switchDarkTheme.isChecked = SearchActivity.switchDarkBoolean
+        switchDarkTheme.isChecked = MainActivity.switchDarkBoolean
 
         switchDarkTheme.setOnClickListener(View.OnClickListener {
-            SearchActivity.switchDarkBoolean = switchDarkTheme.isChecked
-            if(!SearchActivity.switchDarkBoolean){
+            MainActivity.sharedPrefs.edit().putBoolean(MainActivity.SWITCH_TEXT_KEY, switchDarkTheme.isChecked).apply()
+            if(!switchDarkTheme.isChecked){
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -74,6 +74,7 @@ class SettingsActivity : AppCompatActivity() {
         })
 
 
-
     }
+
+
 }
