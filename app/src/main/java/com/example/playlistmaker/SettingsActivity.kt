@@ -9,6 +9,8 @@ import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 
+const val THEME_KEY = "key_for_theme"
+const val THEME = "day_night_theme"
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,15 +19,13 @@ class SettingsActivity : AppCompatActivity() {
         val context = applicationContext
 
         val buttonSettings = findViewById<ImageView>(R.id.back_settings_image)
-
         buttonSettings.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val buttonShare = findViewById<ImageView>(R.id.imageShare)
-
         val stringValueShare = context.getString(R.string.uri_share)
 
+        val buttonShare = findViewById<ImageView>(R.id.imageShare)
         buttonShare.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
@@ -36,12 +36,11 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(shareIntent)
         }
 
-        val buttonSupport = findViewById<ImageView>(R.id.image_support)
-
         val stringValueMail = context.getString(R.string.my_mail)
         val stringValueSubject = context.getString(R.string.support_subject_message)
         val stringValueText = context.getString(R.string.support_text_message)
 
+        val buttonSupport = findViewById<ImageView>(R.id.image_support)
         buttonSupport.setOnClickListener {
             Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:" + stringValueMail)
@@ -49,29 +48,21 @@ class SettingsActivity : AppCompatActivity() {
                 putExtra(Intent.EXTRA_TEXT, stringValueText)
                 startActivity(this)
             }
-
         }
 
         val stringValueTermsOfUse = context.getString(R.string.uri_terms_of_use)
 
         val buttonTermsOfUse = findViewById<ImageView>(R.id.image_terms_of_use)
-
         buttonTermsOfUse.setOnClickListener {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(stringValueTermsOfUse))
             startActivity(browserIntent)
         }
 
         val switchDarkTheme = findViewById<Switch>(R.id.switchDarkTheme)
-        switchDarkTheme.isChecked = MainActivity.switchDarkBoolean
-
-        switchDarkTheme.setOnClickListener(View.OnClickListener {
-            MainActivity.sharedPrefs.edit().putBoolean(MainActivity.SWITCH_TEXT_KEY, switchDarkTheme.isChecked).apply()
-            if(!switchDarkTheme.isChecked){
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
-        })
+        switchDarkTheme.isChecked = (applicationContext as App).darkTheme
+        switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+        }
 
 
     }

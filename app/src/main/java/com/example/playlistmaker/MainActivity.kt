@@ -14,15 +14,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        sharedPrefs = getSharedPreferences(SP_PLAYLIST, MODE_PRIVATE)
-        switchDarkBoolean = sharedPrefs.getBoolean(SWITCH_TEXT_KEY, false)
-
-        if(!switchDarkBoolean){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
-
         val buttonSearch = findViewById<Button>(R.id.button_search)
 
         buttonSearch.setOnClickListener {
@@ -45,12 +36,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    companion object{
-        lateinit var sharedPrefs: SharedPreferences
-        var switchDarkBoolean = false
-        const val SP_PLAYLIST = "playlist_preferences"
-        const val SWITCH_TEXT_KEY = "key_for_dark_switch"
-    }
-
 }
-

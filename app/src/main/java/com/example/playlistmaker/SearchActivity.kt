@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
@@ -28,11 +29,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
+    private val SP_PLAYLIST = "playlist_preferences"
+    private lateinit var sharedPrefs: SharedPreferences
     private lateinit var editTextSearch: EditText
     private lateinit var notFound: LinearLayout
     private lateinit var noInternet: LinearLayout
     private lateinit var historyLL: LinearLayout
-    private val searchHistory = SearchHistory(MainActivity.sharedPrefs)
+    private lateinit var searchHistory: SearchHistory
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
     private val trackAdapter = TrackAdapter(trackList,
@@ -40,9 +43,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var trackAdapterHistory: TrackAdapter
     private lateinit var rvTrackList: RecyclerView
     private lateinit var rvTrackListHistory: RecyclerView
-
-
-        private val baseUrl = "https://itunes.apple.com"
+    private val baseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
@@ -55,6 +56,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        sharedPrefs = getSharedPreferences(SP_PLAYLIST, MODE_PRIVATE)
         rvTrackList = findViewById<RecyclerView>(R.id.rv_track_list)
         rvTrackListHistory = findViewById<RecyclerView>(R.id.rv_history_track_list)
         editTextSearch = findViewById<EditText>(R.id.search_edit_text)
@@ -63,16 +65,17 @@ class SearchActivity : AppCompatActivity() {
         historyLL = findViewById<LinearLayout>(R.id.ll_history_search)
         val updateButton = findViewById<Button>(R.id.update_button)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history_button)
+        searchHistory = SearchHistory(sharedPrefs)
         searchHistory.getTracks()
         trackAdapterHistory = TrackAdapter(searchHistory.historyList,
             callback = { track -> run { searchHistory.addTrack(track) } })
-
         rvTrackListHistory.adapter = trackAdapterHistory
         rvTrackListHistory.layoutManager = LinearLayoutManager(
             this@SearchActivity,
-                LinearLayoutManager.VERTICAL,
-                false
-            )
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
 
         if(searchHistory.historyList.size!=0&&text.isEmpty()){
             historyLL.visibility = View.VISIBLE
@@ -213,10 +216,10 @@ class SearchActivity : AppCompatActivity() {
 
                         rvTrackList.adapter = trackAdapter
                         rvTrackList.layoutManager = LinearLayoutManager(
-                                this@SearchActivity,
-                                LinearLayoutManager.VERTICAL,
-                                false
-                            )
+                            this@SearchActivity,
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
                     }
                 }
 

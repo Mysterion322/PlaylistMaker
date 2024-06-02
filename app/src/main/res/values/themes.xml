@@ -17,9 +17,8 @@
         <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
         <!-- Customize your theme here. -->
         <item name="colorOnPrimaryFixed">@color/search_error_image_color</item>
-
-        <item name="colorOnPrimaryFixedVariant">@color/search_layout_color</item>
-        <item name="colorOnPrimarySurface">@color/grey</item>
+        <item name="colorOnPrimaryFixedVariant">@color/background_main</item>
+        <item name="colorOnPrimarySurface">@color/white</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
