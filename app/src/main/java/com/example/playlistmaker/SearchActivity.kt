@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
@@ -65,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
         historyLL = findViewById<LinearLayout>(R.id.ll_history_search)
         val updateButton = findViewById<Button>(R.id.update_button)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history_button)
+        val clearEditText = findViewById<ImageView>(R.id.iv_clear_edit_text)
         searchHistory = SearchHistory(sharedPrefs)
         searchHistory.getTracks()
         trackAdapterHistory = TrackAdapter(searchHistory.historyList,
@@ -81,44 +83,16 @@ class SearchActivity : AppCompatActivity() {
             historyLL.visibility = View.VISIBLE
         }
 
-        editTextSearch.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
-
-        editTextSearch.setOnTouchListener(OnTouchListener { v, event ->
-
-            val drawableRight = 2
-
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= editTextSearch.getRight() - editTextSearch.getCompoundDrawables()
-                        .get(drawableRight).getBounds().width()
-                ) {
-                    editTextSearch.setText(EMPTY)
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.search_small_image,
-                        0,
-                        R.drawable.search_image_layout,
-                        0
-                    )
-                    trackList.clear()
-                    notFound.visibility = View.GONE
-                    noInternet.visibility = View.GONE
-                    trackAdapter.notifyDataSetChanged()
-
-                    val view: View? = this.currentFocus
-
-                    if (view != null) {
-                        val inputMethodManager =
-                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-
-                        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
-                    }
-
-                    editTextSearch.setCursorVisible(false)
-                    return@OnTouchListener true
-                }
-            }
-            editTextSearch.setCursorVisible(true)
-            false
-        })
+        clearEditText.setOnClickListener {
+            editTextSearch.setText(EMPTY)
+            trackList.clear()
+            trackAdapter.notifyDataSetChanged()
+            trackAdapterHistory.notifyDataSetChanged()
+            notFound.visibility = View.GONE
+            noInternet.visibility = View.GONE
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
+        }
 
         editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -128,15 +102,9 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 if (editTextSearch.text.length == 0) {
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.search_small_image, 0,
-                        R.drawable.search_image_layout, 0
-                    )
+                    clearEditText.visibility = View.GONE
                 } else {
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.search_small_image, 0,
-                        R.drawable.clear_small_image, 0
-                    )
+                    clearEditText.visibility = View.VISIBLE
                 }
                 // Здесь можно добавить любой нужный код при изменении текста
             }
