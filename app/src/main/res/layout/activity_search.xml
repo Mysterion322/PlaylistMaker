@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimarySurface"
     android:orientation="vertical"
     tools:context=".SearchActivity">
 
@@ -25,7 +26,19 @@
             android:id="@+id/search_edit_text"
             style="@style/SearchEditTextStyle"
             android:imeOptions="actionDone"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:paddingEnd="28dp"/>
+
+        <ImageView
+            android:id="@+id/iv_clear_edit_text"
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginEnd="14dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            app:tint="?attr/colorPrimaryVariant"
+            app:srcCompat="@drawable/clear_small_image" />
 
     </FrameLayout>
 
@@ -33,6 +46,32 @@
         android:layout_width="match_parent"
         android:layout_height="16dp" />
 
+    <LinearLayout
+        android:id="@+id/ll_history_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_you_search"
+            style="@style/ErrorSearchText"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="22dp"
+            android:text="@string/you_search" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_history_track_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/clear_history_button"
+            android:text="@string/clear_history"
+            style="@style/SearchButtonStyle" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_not_found"
@@ -78,17 +117,8 @@
 
         <Button
             android:id="@+id/update_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/indent_layout"
-            android:backgroundTint="?attr/colorOnPrimaryFixed"
-            android:fontFamily="@font/ys_display_medium"
             android:text="@string/update"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/error_button_text"
-            app:cornerRadius="@dimen/error_button_radius" />
+            style="@style/SearchButtonStyle"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

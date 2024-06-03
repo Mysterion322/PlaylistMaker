@@ -1,6 +1,8 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
@@ -28,14 +30,20 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
+    private val SP_PLAYLIST = "playlist_preferences"
+    private lateinit var sharedPrefs: SharedPreferences
     private lateinit var editTextSearch: EditText
     private lateinit var notFound: LinearLayout
     private lateinit var noInternet: LinearLayout
+    private lateinit var historyLL: LinearLayout
+    private lateinit var searchHistory: SearchHistory
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
-    private val trackAdapter = TrackAdapter(trackList)
+    private val trackAdapter = TrackAdapter(trackList,
+        callback = { track -> run { searchHistory.addTrack(track) }})
+    private lateinit var trackAdapterHistory: TrackAdapter
     private lateinit var rvTrackList: RecyclerView
-
+    private lateinit var rvTrackListHistory: RecyclerView
     private val baseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -49,50 +57,42 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        sharedPrefs = getSharedPreferences(SP_PLAYLIST, MODE_PRIVATE)
         rvTrackList = findViewById<RecyclerView>(R.id.rv_track_list)
+        rvTrackListHistory = findViewById<RecyclerView>(R.id.rv_history_track_list)
         editTextSearch = findViewById<EditText>(R.id.search_edit_text)
         notFound = findViewById<LinearLayout>(R.id.ll_not_found)
         noInternet = findViewById<LinearLayout>(R.id.ll_no_internet)
+        historyLL = findViewById<LinearLayout>(R.id.ll_history_search)
         val updateButton = findViewById<Button>(R.id.update_button)
-
-        editTextSearch.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS)
-
-        editTextSearch.setOnTouchListener(OnTouchListener { v, event ->
-
-            val drawableRight = 2
-
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= editTextSearch.getRight() - editTextSearch.getCompoundDrawables()
-                        .get(drawableRight).getBounds().width()
-                ) {
-                    editTextSearch.setText(EMPTY)
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.search_small_image,
-                        0,
-                        R.drawable.search_image_layout,
-                        0
-                    )
-                    trackList.clear()
-                    notFound.visibility = View.GONE
-                    noInternet.visibility = View.GONE
-                    trackAdapter.notifyDataSetChanged()
-
-                    val view: View? = this.currentFocus
-
-                    if (view != null) {
-                        val inputMethodManager =
-                            getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-
-                        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0)
-                    }
-
-                    editTextSearch.setCursorVisible(false)
-                    return@OnTouchListener true
-                }
-            }
-            editTextSearch.setCursorVisible(true)
+        val clearHistoryButton = findViewById<Button>(R.id.clear_history_button)
+        val clearEditText = findViewById<ImageView>(R.id.iv_clear_edit_text)
+        searchHistory = SearchHistory(sharedPrefs)
+        searchHistory.getTracks()
+        trackAdapterHistory = TrackAdapter(searchHistory.historyList,
+            callback = { track -> run { searchHistory.addTrack(track) } })
+        rvTrackListHistory.adapter = trackAdapterHistory
+        rvTrackListHistory.layoutManager = LinearLayoutManager(
+            this@SearchActivity,
+            LinearLayoutManager.VERTICAL,
             false
-        })
+        )
+
+
+        if(searchHistory.historyList.size!=0&&text.isEmpty()){
+            historyLL.visibility = View.VISIBLE
+        }
+
+        clearEditText.setOnClickListener {
+            editTextSearch.setText(EMPTY)
+            trackList.clear()
+            trackAdapter.notifyDataSetChanged()
+            trackAdapterHistory.notifyDataSetChanged()
+            notFound.visibility = View.GONE
+            noInternet.visibility = View.GONE
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(editTextSearch.windowToken, 0)
+        }
 
         editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -102,25 +102,21 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
                 if (editTextSearch.text.length == 0) {
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.search_small_image,
-                        0,
-                        R.drawable.search_image_layout,
-                        0
-                    )
+                    clearEditText.visibility = View.GONE
                 } else {
-                    editTextSearch.setCompoundDrawablesWithIntrinsicBounds(
-                        R.drawable.search_small_image,
-                        0,
-                        R.drawable.clear_small_image,
-                        0
-                    )
+                    clearEditText.visibility = View.VISIBLE
                 }
                 // Здесь можно добавить любой нужный код при изменении текста
             }
 
             override fun afterTextChanged(s: Editable?) {
                 text = s.toString()
+                if(searchHistory.historyList.size!=0&&text.isEmpty()){
+                    trackAdapterHistory.notifyDataSetChanged()
+                    historyLL.visibility = View.VISIBLE
+                }else{
+                    historyLL.visibility = View.GONE
+                }
                 // Здесь можно добавить любой нужный код после изменения текста
             }
         })
@@ -136,6 +132,12 @@ class SearchActivity : AppCompatActivity() {
             apiRequest(text)
         }
 
+        clearHistoryButton.setOnClickListener {
+            searchHistory.historyList.clear()
+            historyLL.visibility = View.GONE
+            trackAdapterHistory.notifyDataSetChanged()
+        }
+
         editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 apiRequest(text)
@@ -146,17 +148,20 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        searchHistory.putTracks()
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        val editTextSearch = findViewById<EditText>(R.id.search_edit_text)
         outState.putString(KEY, editTextSearch.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
 
-        val editTextSearch = findViewById<EditText>(R.id.search_edit_text)
         editTextSearch.setText(savedInstanceState.getString(KEY, EMPTY))
     }
 
@@ -178,12 +183,11 @@ class SearchActivity : AppCompatActivity() {
                         noInternet.visibility = View.GONE
 
                         rvTrackList.adapter = trackAdapter
-                        rvTrackList.layoutManager =
-                            LinearLayoutManager(
-                                this@SearchActivity,
-                                LinearLayoutManager.VERTICAL,
-                                false
-                            )
+                        rvTrackList.layoutManager = LinearLayoutManager(
+                            this@SearchActivity,
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
                     }
                 }
 
@@ -202,7 +206,6 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val KEY = "SEARCH_TEXT"
         private const val EMPTY = ""
-        var switchDarkBoolean = false
     }
 
 }
