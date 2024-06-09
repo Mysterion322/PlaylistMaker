@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
@@ -39,8 +40,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchHistory: SearchHistory
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
-    private val trackAdapter = TrackAdapter(trackList,
-        callback = { track -> run { searchHistory.addTrack(track) }})
+    private lateinit var trackAdapter: TrackAdapter
     private lateinit var trackAdapterHistory: TrackAdapter
     private lateinit var rvTrackList: RecyclerView
     private lateinit var rvTrackListHistory: RecyclerView
@@ -67,17 +67,21 @@ class SearchActivity : AppCompatActivity() {
         val updateButton = findViewById<Button>(R.id.update_button)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history_button)
         val clearEditText = findViewById<ImageView>(R.id.iv_clear_edit_text)
+        val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
         searchHistory = SearchHistory(sharedPrefs)
         searchHistory.getTracks()
+        trackAdapter = TrackAdapter(trackList,
+            callback = { track -> run { searchHistory.addTrack(track)
+                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))}})
         trackAdapterHistory = TrackAdapter(searchHistory.historyList,
-            callback = { track -> run { searchHistory.addTrack(track) } })
+            callback = { track -> run { searchHistory.addTrack(track)
+                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))} })
         rvTrackListHistory.adapter = trackAdapterHistory
         rvTrackListHistory.layoutManager = LinearLayoutManager(
             this@SearchActivity,
             LinearLayoutManager.VERTICAL,
             false
         )
-
 
         if(searchHistory.historyList.size!=0&&text.isEmpty()){
             historyLL.visibility = View.VISIBLE
@@ -205,6 +209,7 @@ class SearchActivity : AppCompatActivity() {
 
     companion object {
         private const val KEY = "SEARCH_TEXT"
+        const val INTENT_TRACK_KEY = "intent_track"
         private const val EMPTY = ""
     }
 
