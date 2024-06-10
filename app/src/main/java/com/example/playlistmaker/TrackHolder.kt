@@ -18,13 +18,12 @@ class TrackHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Track) {
         tvTrackName.text = item.trackName
-        tvTrackArtist.text = item.artistName+" • "+ SimpleDateFormat("mm:ss",
-            Locale.getDefault()).format(item.trackTimeMillis)
+        tvTrackArtist.text = item.artistName+" • "+ item.trackTime
         Glide.with(itemView)
             .load(item.artworkUrl100)
             .placeholder(R.drawable.placeholder)
             .centerCrop()
-            .transform(RoundedCorners(10))
+            .transform(RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.api_image_radius)))
             .into(ivTrack)
 
     }

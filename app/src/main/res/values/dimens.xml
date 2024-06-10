@@ -6,6 +6,7 @@
     <dimen name="indent_normal">16dp</dimen>
     <dimen name="indent_music">8dp</dimen>
     <dimen name="indent_music_card">12dp</dimen>
+    <dimen name="indent_audio_player">12dp</dimen>
     <dimen name="button_radius">16dp</dimen>
     <dimen name="search_layout_radius">8dp</dimen>
     <dimen name="strings_layout_indent">60dp</dimen>
@@ -18,7 +19,9 @@
     <dimen name="error_search_image_indent">86dp</dimen>
     <dimen name="error_search_text">19sp</dimen>
     <dimen name="error_button_text">14sp</dimen>
+    <dimen name="audio_text">14sp</dimen>
     <dimen name="error_button_radius">54dp</dimen>
+    <dimen name="api_image_radius">10dp</dimen>
 
 
 </resources>

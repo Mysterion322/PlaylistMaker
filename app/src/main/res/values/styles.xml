@@ -32,7 +32,6 @@
     <style name="TitleText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_gravity">start</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">@dimen/text_big</item>
         <item name="android:textAllCaps">false</item>
@@ -67,6 +66,24 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">?attr/colorPrimary</item>
         <item name="android:layout_marginTop">@dimen/indent_normal</item>
+    </style>
+    <style name="AudioPlayerLeftText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/audio_text</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:layout_marginBottom">@dimen/indent_audio_player</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+    <style name="AudioPlayerRightText" parent="AudioPlayerLeftText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:gravity">end</item>
     </style>
 
     <style name="MainButtonLayoutStyle">
