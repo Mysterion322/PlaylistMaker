@@ -146,9 +146,7 @@ class SearchActivity : AppCompatActivity() {
 
         updateButton.setOnClickListener {
             if(clickDebounce()) {
-                noInternet.visibility = View.GONE
-                handler.removeCallbacks(searchRunnable)
-                handler.post(searchRunnable)
+                apiRequest(text)
             }
         }
 
@@ -160,8 +158,7 @@ class SearchActivity : AppCompatActivity() {
 
         editTextSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE&&clickDebounce()) {
-                handler.removeCallbacks(searchRunnable)
-                handler.post(searchRunnable)
+                apiRequest(text)
             }
             false
         }
