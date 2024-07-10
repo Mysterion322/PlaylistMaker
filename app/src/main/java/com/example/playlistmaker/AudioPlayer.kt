@@ -49,7 +49,6 @@ class AudioPlayer : AppCompatActivity() {
         val countryText = findViewById<TextView>(R.id.tv_country_value)
         trackTimerTV = findViewById<TextView>(R.id.tv_track_timer)
         playIV = findViewById(R.id.iv_play_or_stop)
-      //  trackTimerTV.text = "00:00"
         url = track.previewUrl
         if(url!=null){
             preparePlayer()
@@ -112,6 +111,7 @@ class AudioPlayer : AppCompatActivity() {
         }
         mediaPlayer.setOnCompletionListener {
             playIV.setImageResource(R.drawable.play)
+            trackTimerTV.text = "00:00"
             playerState = STATE_PREPARED
         }
     }
