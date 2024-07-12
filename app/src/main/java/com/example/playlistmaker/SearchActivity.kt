@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -22,6 +24,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,8 +35,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 class SearchActivity : AppCompatActivity() {
 
     private val SP_PLAYLIST = "playlist_preferences"
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable { apiRequest(text) }
+    private val handler = Handler(Looper.getMainLooper())
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var editTextSearch: EditText
+    private lateinit var progressBar: CircularProgressIndicator
     private lateinit var notFound: LinearLayout
     private lateinit var noInternet: LinearLayout
     private lateinit var historyLL: LinearLayout
@@ -64,6 +71,7 @@ class SearchActivity : AppCompatActivity() {
         notFound = findViewById<LinearLayout>(R.id.ll_not_found)
         noInternet = findViewById<LinearLayout>(R.id.ll_no_internet)
         historyLL = findViewById<LinearLayout>(R.id.ll_history_search)
+        progressBar = findViewById(R.id.progressBar)
         val updateButton = findViewById<Button>(R.id.update_button)
         val clearHistoryButton = findViewById<Button>(R.id.clear_history_button)
         val clearEditText = findViewById<ImageView>(R.id.iv_clear_edit_text)
@@ -71,11 +79,16 @@ class SearchActivity : AppCompatActivity() {
         searchHistory = SearchHistory(sharedPrefs)
         searchHistory.getTracks()
         trackAdapter = TrackAdapter(trackList,
-            callback = { track -> run { searchHistory.addTrack(track)
-                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))}})
+            callback = { track -> if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
+            }})
         trackAdapterHistory = TrackAdapter(searchHistory.historyList,
-            callback = { track -> run { searchHistory.addTrack(track)
-                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))} })
+            callback = { track -> if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
+                trackAdapterHistory.notifyDataSetChanged()
+            }})
         rvTrackListHistory.adapter = trackAdapterHistory
         rvTrackListHistory.layoutManager = LinearLayoutManager(
             this@SearchActivity,
@@ -109,6 +122,7 @@ class SearchActivity : AppCompatActivity() {
                     clearEditText.visibility = View.GONE
                 } else {
                     clearEditText.visibility = View.VISIBLE
+                    searchDebounce()
                 }
                 // Здесь можно добавить любой нужный код при изменении текста
             }
@@ -126,14 +140,14 @@ class SearchActivity : AppCompatActivity() {
         })
 
         val buttonSettings = findViewById<ImageView>(R.id.back_search_image)
-
         buttonSettings.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         updateButton.setOnClickListener {
-            noInternet.visibility = View.GONE
-            apiRequest(text)
+            if(clickDebounce()) {
+                apiRequest(text)
+            }
         }
 
         clearHistoryButton.setOnClickListener {
@@ -143,9 +157,8 @@ class SearchActivity : AppCompatActivity() {
         }
 
         editTextSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_DONE&&clickDebounce()) {
                 apiRequest(text)
-                true
             }
             false
         }
@@ -155,6 +168,20 @@ class SearchActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         searchHistory.putTracks()
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, 1000)
+        }
+        return current
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, 2000)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -170,6 +197,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun apiRequest(text: String) {
+        if(text.isEmpty()){return}
+        notFound.visibility = View.GONE
+        noInternet.visibility = View.GONE
+        historyLL.visibility = View.GONE
+        rvTrackList.visibility = View.GONE
+        progressBar.visibility = View.VISIBLE
+
         iTunesService.getTrack(text).enqueue(object : Callback<ResponseTracks> {
             override fun onResponse(call: Call<ResponseTracks>, response: Response<ResponseTracks>) {
 
@@ -179,13 +213,15 @@ class SearchActivity : AppCompatActivity() {
                     if (tracksFromResp.isEmpty()) {
                         trackList.clear()
                         noInternet.visibility = View.GONE
+                        progressBar.visibility = View.GONE
                         notFound.visibility = View.VISIBLE
                     } else {
                         trackList.clear()
                         trackList.addAll(tracksFromResp.toMutableList())
                         notFound.visibility = View.GONE
                         noInternet.visibility = View.GONE
-
+                        progressBar.visibility = View.GONE
+                        rvTrackList.visibility = View.VISIBLE
                         rvTrackList.adapter = trackAdapter
                         rvTrackList.layoutManager = LinearLayoutManager(
                             this@SearchActivity,
@@ -200,6 +236,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onFailure(p0: Call<ResponseTracks>, p1: Throwable) {
                 trackList.clear()
                 notFound.visibility = View.GONE
+                progressBar.visibility = View.GONE
                 noInternet.visibility = View.VISIBLE
 
             }

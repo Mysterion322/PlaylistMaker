@@ -159,6 +159,7 @@
         <item name="android:drawableTint">?attr/colorPrimaryVariant</item>
         <item name="android:inputType">textNoSuggestions</item>
         <item name="android:drawableRight">@drawable/search_image_layout</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor</item>
     </style>
 
 
