@@ -1,16 +1,15 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.settings
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
 
-const val THEME_KEY = "key_for_theme"
-const val THEME = "day_night_theme"
+
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,14 +58,10 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val switchDarkTheme = findViewById<Switch>(R.id.switchDarkTheme)
-        val sharedPrefs = getSharedPreferences(THEME, MODE_PRIVATE)
-        val checked = sharedPrefs.getBoolean(THEME_KEY, false)
-        switchDarkTheme.isChecked = checked
+        switchDarkTheme.isChecked = (applicationContext as App).darkTheme
         switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
-            sharedPrefs.edit().putBoolean(THEME_KEY, isChecked).apply()
         }
-
 
 
     }
