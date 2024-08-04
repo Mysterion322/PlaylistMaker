@@ -70,8 +70,8 @@ class SearchActivity : AppCompatActivity() {
         trackAdapterHistory = TrackAdapter(searchHistory.getTracks(),
             callback = { track -> if (clickDebounce()) {
                 searchHistory.addTrack(track)
-                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
                 trackAdapterHistory.notifyDataSetChanged()
+                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
             }})
         rvTrackListHistory.adapter = trackAdapterHistory
         rvTrackListHistory.layoutManager = LinearLayoutManager(
@@ -114,7 +114,18 @@ class SearchActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 text = s.toString()
                 if(text.isEmpty()&&searchHistory.getTracks().size!=0){
-                    trackAdapterHistory.notifyDataSetChanged()
+                    trackAdapterHistory = TrackAdapter(searchHistory.getTracks(),
+                        callback = { track -> if (clickDebounce()) {
+                            searchHistory.addTrack(track)
+                            trackAdapterHistory.notifyDataSetChanged()
+                            startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
+                        }})
+                    rvTrackListHistory.adapter = trackAdapterHistory
+                    rvTrackListHistory.layoutManager = LinearLayoutManager(
+                        this@SearchActivity,
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
                     historyLL.visibility = View.VISIBLE
                 }else{
                     historyLL.visibility = View.GONE
@@ -187,8 +198,6 @@ class SearchActivity : AppCompatActivity() {
             .search(text, object : TrackInteractor.TrackConsumer {
                 override fun consume(foundTracks: List<Track>) {
                     runOnUiThread {
-                        progressBar.visibility = View.GONE
-
                         if (foundTracks.isNotEmpty()) {
                             trackList.clear()
                             trackList.addAll(foundTracks)
@@ -209,7 +218,6 @@ class SearchActivity : AppCompatActivity() {
                             progressBar.visibility = View.GONE
                             notFound.visibility = View.VISIBLE
                         }
-
                     }
                 }
 
