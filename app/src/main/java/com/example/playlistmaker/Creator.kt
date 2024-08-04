@@ -3,12 +3,18 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.media.MediaPlayer
+import android.os.Handler
+import android.widget.ImageView
+import android.widget.TextView
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
+import com.example.playlistmaker.data.repository.AudioRepositoryImpl
 import com.example.playlistmaker.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.api.TrackRepository
 import com.example.playlistmaker.domain.impl.TrackInteractorImpl
+import com.example.playlistmaker.domain.models.Track
 
 
 object Creator {
@@ -34,7 +40,13 @@ object Creator {
         return SearchHistoryRepositoryImpl(provideSharedPreferences())
     }
 
-    fun provideSharedPreferences(): SharedPreferences {
+    fun provideAudioRepository(mediaPlayer: MediaPlayer, playIV: ImageView, handler: Handler,
+                               trackTimerTV: TextView, track: Track?
+    ): AudioRepositoryImpl {
+        return AudioRepositoryImpl(mediaPlayer, playIV, handler, trackTimerTV, track)
+    }
+
+    private fun provideSharedPreferences(): SharedPreferences {
         return application.getSharedPreferences(SP_PLAYLIST, MODE_PRIVATE)
     }
 

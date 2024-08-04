@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.SearchHistoryRepository
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayer
@@ -36,10 +36,18 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var notFound: LinearLayout
     private lateinit var noInternet: LinearLayout
     private lateinit var historyLL: LinearLayout
-    private lateinit var searchHistory: SearchHistoryRepository
+    private lateinit var searchHistory: SearchHistoryInteractor
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
-    private lateinit var trackAdapter: TrackAdapter
+    private val trackAdapter: TrackAdapter by lazy {
+        TrackAdapter(trackList) { track ->
+            if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
+                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
+            }
+        }
+    }
     private lateinit var trackAdapterHistory: TrackAdapter
     private lateinit var rvTrackList: RecyclerView
     private lateinit var rvTrackListHistory: RecyclerView
@@ -62,11 +70,6 @@ class SearchActivity : AppCompatActivity() {
         val clearEditText = findViewById<ImageView>(R.id.iv_clear_edit_text)
         val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
         searchHistory = Creator.provideSearchHistoryRepository()
-        trackAdapter = TrackAdapter(trackList,
-            callback = { track -> if (clickDebounce()) {
-                searchHistory.addTrack(track)
-                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
-            }})
         trackAdapterHistory = TrackAdapter(searchHistory.getTracks(),
             callback = { track -> if (clickDebounce()) {
                 searchHistory.addTrack(track)
