@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayer
@@ -37,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var notFound: LinearLayout
     private lateinit var noInternet: LinearLayout
     private lateinit var historyLL: LinearLayout
-    private lateinit var searchHistory: SearchHistoryInteractor
+    private val searchHistory: SearchHistoryInteractor by lazy { Creator.provideSearchHistoryInteractor() }
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
     private val trackAdapter: TrackAdapter by lazy {
@@ -70,7 +69,6 @@ class SearchActivity : AppCompatActivity() {
         val clearHistoryButton = findViewById<Button>(R.id.clear_history_button)
         val clearEditText = findViewById<ImageView>(R.id.iv_clear_edit_text)
         val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
-        searchHistory = Creator.provideSearchHistoryInteractor()
         trackAdapterHistory = TrackAdapter(searchHistory.getHistory(),
             callback = { track -> if (clickDebounce()) {
                 searchHistory.addToHistory(track)

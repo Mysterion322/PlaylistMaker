@@ -12,7 +12,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.AudioInteractor
-import com.example.playlistmaker.domain.api.AudioRepository
 import com.example.playlistmaker.presentation.ui.search.SearchActivity
 import com.example.playlistmaker.domain.models.Track
 
