@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.AudioInteractor
+import com.example.playlistmaker.domain.api.AudioRepository
 import com.example.playlistmaker.presentation.ui.search.SearchActivity
 import com.example.playlistmaker.domain.models.Track
 
@@ -21,7 +22,7 @@ class AudioPlayer : AppCompatActivity() {
     private lateinit var playIV: ImageView
     private lateinit var trackTimerTV: TextView
     private val mediaPlayer = MediaPlayer()
-    private lateinit var audioRepository: AudioInteractor
+    private lateinit var audioInteractor: AudioInteractor
     private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +45,7 @@ class AudioPlayer : AppCompatActivity() {
         val countryText = findViewById<TextView>(R.id.tv_country_value)
         trackTimerTV = findViewById<TextView>(R.id.tv_track_timer)
         playIV = findViewById(R.id.iv_play_or_stop)
-        audioRepository = Creator.provideAudioRepository(mediaPlayer, playIV, handler, trackTimerTV, track)
+        audioInteractor = Creator.provideAudioInteractor(mediaPlayer, playIV, handler, trackTimerTV, track)
 
         track?.let {
         Glide.with(this)
@@ -67,7 +68,7 @@ class AudioPlayer : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        audioRepository.pausePlayer()
+        audioInteractor.pauseAudio()
         handler.removeCallbacksAndMessages(null)
     }
 

@@ -5,7 +5,7 @@ import android.os.Handler
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.AudioInteractor
+import com.example.playlistmaker.domain.api.AudioRepository
 import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -14,7 +14,7 @@ class AudioRepositoryImpl (private val mediaPlayer: MediaPlayer,
                            private val playIV: ImageView,
                            private val handler: Handler,
                            private val trackTimerTV: TextView,
-                           val track: Track?): AudioInteractor {
+                           val track: Track?): AudioRepository {
 
     private val STATE_DEFAULT = 0
     private val STATE_PREPARED = 1
