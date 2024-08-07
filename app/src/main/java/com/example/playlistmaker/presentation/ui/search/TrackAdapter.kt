@@ -1,13 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.search
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import java.lang.IllegalStateException
-import com.google.gson.Gson
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 
 class TrackAdapter(
     private val items: MutableList<Track>,

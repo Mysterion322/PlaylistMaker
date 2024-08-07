@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="?attr/colorOnPrimarySurface"
-    tools:context=".SettingsActivity">
+    tools:context=".presentation.ui.settings.SettingsActivity">
 
     <LinearLayout
         style="@style/TitleLayoutStyle"
-        tools:context=".SettingsActivity">
+        tools:context=".presentation.ui.settings.SettingsActivity">
 
         <ImageView
             android:id="@+id/back_settings_image"

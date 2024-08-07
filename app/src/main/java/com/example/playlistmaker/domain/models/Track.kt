@@ -1,9 +1,11 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain.models
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Parcelize
 data class Track(
     val trackName: String,
     val artistName: String,
@@ -14,7 +16,7 @@ data class Track(
     val primaryGenreName: String = "",
     val country: String = "",
     val previewUrl: String
-) : Serializable {
+) : Parcelable {
     val artworkUrl512: String
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
     val trackTime: String get() =
