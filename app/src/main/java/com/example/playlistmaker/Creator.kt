@@ -42,7 +42,7 @@ object Creator {
     }
 
 
-    fun provideSearchHistoryRepository(): SearchHistoryRepository {
+    private fun provideSearchHistoryRepository(): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(provideSharedPreferences())
     }
 
@@ -50,7 +50,7 @@ object Creator {
         return SearchHistoryInteractorImpl(provideSearchHistoryRepository())
     }
 
-    fun provideAudioRepository(mediaPlayer: MediaPlayer, playIV: ImageView, handler: Handler,
+    private fun provideAudioRepository(mediaPlayer: MediaPlayer, playIV: ImageView, handler: Handler,
                                trackTimerTV: TextView, track: Track?
     ): AudioRepository {
         return AudioRepositoryImpl(mediaPlayer, playIV, handler, trackTimerTV, track)
