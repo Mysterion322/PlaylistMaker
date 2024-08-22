@@ -25,5 +25,6 @@
     <string name="genre">Жанр</string>
     <string name="country">Страна</string>
     <string name="album">Альбом</string>
+    <string name="search_internet_error">Загрузка не удалась. Проверьте подключение к интернету</string>
 
 </resources>
