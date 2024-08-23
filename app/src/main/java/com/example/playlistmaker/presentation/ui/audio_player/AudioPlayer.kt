@@ -88,11 +88,13 @@ class AudioPlayer : AppCompatActivity() {
                     PlayingState.Paused,
                     PlayingState.Complete,
                     -> R.drawable.play
-
                     PlayingState.Playing -> R.drawable.pause
                 }
             )
         )
+        if(state is PlayingState.Complete){
+            binding.tvTrackTimer.text = "00:00"
+        }
     }
 
 }
