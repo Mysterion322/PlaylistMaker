@@ -10,7 +10,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.domain.api.AudioInteractor
-import com.example.playlistmaker.domain.models.PlayingState
+import com.example.playlistmaker.domain.api.AudioRepository
+import com.example.playlistmaker.presentation.ui.audio_player.PlayingState
 
 class AudioPlayerViewModel(
     private val trackPlayerInteractor: AudioInteractor,
@@ -33,30 +34,20 @@ class AudioPlayerViewModel(
             }
     }
 
-    init {
-        onPrepare()
-    }
-
-    private fun onPrepare() {
-        trackPlayerInteractor.preparePlayer()
-        playingState.postValue(PlayingState.Prepared)
-        positionState.postValue(0)
-    }
-
     private fun onPlay() {
-        trackPlayerInteractor.startPlayer()
+        trackPlayerInteractor.startAudioPlayer()
         playingState.postValue(PlayingState.Playing)
         startTimer()
     }
 
     fun onPause() {
-        trackPlayerInteractor.pausePlayer()
+        trackPlayerInteractor.pauseAudioPlayer()
         playingState.postValue(PlayingState.Paused)
         pauseTimer()
     }
 
     fun stateControl() {
-        playingState.postValue(trackPlayerInteractor.state)
+        playingState.postValue(trackPlayerInteractor.getAudioState())
     }
 
     fun playingControl() {
@@ -69,7 +60,7 @@ class AudioPlayerViewModel(
         object : Runnable {
             override fun run() {
                 if (playingState.value == PlayingState.Playing) {
-                    positionState.postValue(trackPlayerInteractor.getCurrentPosition())
+                    positionState.postValue(trackPlayerInteractor.getCurrentAudioPosition())
                     handler.postDelayed(this, TIMER_UPDATE_DELAY)
                 }
             }
@@ -87,7 +78,7 @@ class AudioPlayerViewModel(
     override fun onCleared() {
         super.onCleared()
         pauseTimer()
-        trackPlayerInteractor.release()
+        trackPlayerInteractor.releaseAudio()
     }
 
 }

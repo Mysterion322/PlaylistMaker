@@ -4,17 +4,19 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.data.repository.AudioRepository
+import com.example.playlistmaker.data.repository.AudioRepositoryImpl
 import com.example.playlistmaker.data.repository.IsDarkThemeRepositoryImpl
 import com.example.playlistmaker.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.domain.api.AudioInteractor
+import com.example.playlistmaker.domain.api.AudioRepository
 import com.example.playlistmaker.domain.api.IsDarkThemeInteractor
 import com.example.playlistmaker.domain.api.IsDarkThemeRepository
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.api.TrackRepository
+import com.example.playlistmaker.domain.impl.AudioInteractorImpl
 import com.example.playlistmaker.domain.impl.IsDarkThemeInteractorImpl
 import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.TrackInteractorImpl
@@ -47,8 +49,12 @@ object Creator {
         return SearchHistoryInteractorImpl(provideSearchHistoryRepository())
     }
 
+    private fun provideAudioRepository(url: String?): AudioRepository {
+        return AudioRepositoryImpl((url))
+    }
+
     fun provideAudioInteractor(url: String?): AudioInteractor {
-        return AudioRepository((url))
+        return AudioInteractorImpl(provideAudioRepository(url))
     }
 
     fun provideSharedPreferences(): SharedPreferences {

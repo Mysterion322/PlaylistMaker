@@ -2,15 +2,12 @@ package com.example.playlistmaker.presentation.ui.audio_player
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.playlistmaker.domain.models.PlayingState
 import com.example.playlistmaker.presentation.ui.search.SearchActivity
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.view_models.AudioPlayerViewModel
@@ -18,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class AudioPlayer : AppCompatActivity() {
+class AudioPlayerActivity : AppCompatActivity() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private val binding by lazy { ActivityAudioPlayerBinding.inflate(layoutInflater) }
@@ -80,21 +77,30 @@ class AudioPlayer : AppCompatActivity() {
     }
 
     private fun setPlayButtonImage(state: PlayingState) {
-        binding.ivPlayOrStop.setImageDrawable(
-            AppCompatResources.getDrawable(
-                this, when (state) {
-                    PlayingState.Default,
-                    PlayingState.Prepared,
-                    PlayingState.Paused,
-                    PlayingState.Complete,
-                    -> R.drawable.play
-                    PlayingState.Playing -> R.drawable.pause
-                }
+        when (state) {
+            PlayingState.Default,
+            PlayingState.Paused,
+            -> binding.ivPlayOrStop.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this, R.drawable.play
+                )
             )
-        )
-        if(state is PlayingState.Complete){
-            binding.tvTrackTimer.text = "00:00"
+            PlayingState.Playing -> binding.ivPlayOrStop.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this, R.drawable.pause
+                )
+            )
+            PlayingState.Complete -> {
+                binding.ivPlayOrStop.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this, R.drawable.play
+                    )
+                )
+                binding.tvTrackTimer.text = "00:00"
+            }
         }
     }
+
+
 
 }

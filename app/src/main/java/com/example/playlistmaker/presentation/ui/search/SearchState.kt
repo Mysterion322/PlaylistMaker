@@ -1,4 +1,6 @@
-package com.example.playlistmaker.domain.models
+package com.example.playlistmaker.presentation.ui.search
+
+import com.example.playlistmaker.domain.models.Track
 
 sealed interface SearchState {
     data class ContentHistory(val data: List<Track>) : SearchState

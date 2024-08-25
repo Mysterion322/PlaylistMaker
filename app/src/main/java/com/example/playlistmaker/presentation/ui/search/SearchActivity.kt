@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -17,9 +16,8 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import com.example.playlistmaker.domain.models.SearchState
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayer
+import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayerActivity
 import com.example.playlistmaker.presentation.view_models.SearchViewModel
 
 class SearchActivity : AppCompatActivity() {
@@ -39,14 +37,14 @@ class SearchActivity : AppCompatActivity() {
         TrackAdapter(trackList) { track ->
             if (clickDebounce()) {
                 viewModel.addToHistory(track)
-                val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
+                val audioPlayerIntent = Intent(this, AudioPlayerActivity::class.java)
                 startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
             } } }
     private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter(mutableListOf())
     { track ->
         if (clickDebounce()) {
             viewModel.addToHistory(track)
-            val audioPlayerIntent = Intent(this, AudioPlayer::class.java)
+            val audioPlayerIntent = Intent(this, AudioPlayerActivity::class.java)
             startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
         }}  }
 

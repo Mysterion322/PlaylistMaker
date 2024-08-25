@@ -16,7 +16,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
 import com.example.playlistmaker.domain.models.Resource
-import com.example.playlistmaker.domain.models.SearchState
+import com.example.playlistmaker.presentation.ui.search.SearchState
 import com.example.playlistmaker.domain.models.Track
 
 class SearchViewModel(application: Application) : AndroidViewModel(application) {

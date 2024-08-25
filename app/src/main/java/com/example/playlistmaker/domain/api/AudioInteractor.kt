@@ -1,12 +1,13 @@
 package com.example.playlistmaker.domain.api
 
-import com.example.playlistmaker.domain.models.PlayingState
+import com.example.playlistmaker.presentation.ui.audio_player.PlayingState
 
 interface AudioInteractor {
-    var state: PlayingState
-    fun pausePlayer()
-    fun preparePlayer()
-    fun startPlayer()
-    fun release()
-    fun getCurrentPosition(): Int
+
+    fun pauseAudioPlayer()
+    fun startAudioPlayer()
+    fun releaseAudio()
+    fun getCurrentAudioPosition(): Int
+    fun getAudioState(): PlayingState
+
 }

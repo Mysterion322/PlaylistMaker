@@ -15,8 +15,7 @@ class App: Application() {
         super.onCreate()
 
         Creator.initApplication(this)
-        val sharedPrefs = Creator.provideSharedPreferences()
-        switchTheme(sharedPrefs.getBoolean(THEME_KEY, false))
+        switchTheme(Creator.provideIsDarkThemeInteractor().getIsNightTheme())
     }
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
