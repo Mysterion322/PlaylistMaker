@@ -4,36 +4,29 @@ import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.ItunesResponse
 import com.example.playlistmaker.data.dto.TrackRequest
 import com.example.playlistmaker.domain.api.TrackRepository
-import com.example.playlistmaker.domain.models.Resource
 import com.example.playlistmaker.domain.models.Track
 
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
-    override fun searchTracks(expression: String): Resource<List<Track>> {
+
+    override fun searchTracks(expression: String): List<Track> {
         val response = networkClient.doRequest(TrackRequest(expression))
-        return when (response.resultCode) {
-            200 -> {
-                Resource.Success((response as ItunesResponse).results.map {
-                    Track(
-                        trackName = it.trackName,
-                        artistName = it.artistName,
-                        trackTimeMillis = it.trackTimeMillis,
-                        artworkUrl100 = it.artworkUrl100,
-                        collectionName = it.collectionName,
-                        primaryGenreName = it.primaryGenreName,
-                        releaseDate = it.releaseDate,
-                        country = it.country,
-                        previewUrl = it.previewUrl
-                    )
-                })
+        if (response.resultCode == 200) {
+            return (response as ItunesResponse).results.map {
+                Track(
+                    it.trackName,
+                    it.artistName,
+                    it.trackTimeMillis,
+                    it.artworkUrl100,
+                    it.collectionName,
+                    it.releaseDate,
+                    it.primaryGenreName,
+                    it.country,
+                    it.previewUrl
+                )
             }
-
-            -1 -> {
-                Resource.Error("Проверьте подключение к интернету")
-            }
-
-            else -> {
-                Resource.Error("Ошибка сервера")
-            }
+        } else {
+            return emptyList()
         }
     }
+
 }
