@@ -13,22 +13,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayerActivity
 import com.example.playlistmaker.presentation.view_models.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
-    private val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-    }
+    private val viewModel by viewModel<SearchViewModel>()
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
     private var text: String = EMPTY

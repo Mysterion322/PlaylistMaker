@@ -11,6 +11,8 @@ import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
 import com.example.playlistmaker.presentation.ui.search.SearchActivity
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.view_models.AudioPlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -19,7 +21,10 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private val binding by lazy { ActivityAudioPlayerBinding.inflate(layoutInflater) }
-    private lateinit var viewModel: AudioPlayerViewModel
+    private val track by lazy { intent.getParcelableExtra(SearchActivity.INTENT_TRACK_KEY) as? Track }
+    private val viewModel: AudioPlayerViewModel by viewModel {
+        parametersOf(track?.previewUrl)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +54,6 @@ class AudioPlayerActivity : AppCompatActivity() {
 
             binding.ivPlayOrStop.isEnabled = true
 
-            viewModel = ViewModelProvider(
-                this,
-                AudioPlayerViewModel.getViewModelFactory(track.previewUrl)
-            )[AudioPlayerViewModel::class.java]
             viewModel.playingControl()
 }
         viewModel.observePlayingState().observe(this) { state ->

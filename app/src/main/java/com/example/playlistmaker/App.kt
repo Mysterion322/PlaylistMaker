@@ -1,10 +1,18 @@
 package com.example.playlistmaker
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.interactorModule
+import com.example.playlistmaker.di.repositoryModule
+import com.example.playlistmaker.di.viewModelModule
+import com.example.playlistmaker.domain.api.IsDarkThemeInteractor
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.GlobalContext.startKoin
 
-val THEME_KEY = "key_for_theme"
+const val THEME_KEY = "key_for_theme"
+const val SP_PLAYLIST = "playlist_preferences"
 
 class App: Application() {
 
@@ -14,8 +22,14 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        Creator.initApplication(this)
-        switchTheme(Creator.provideIsDarkThemeInteractor().getIsNightTheme())
+        startKoin{
+            androidContext(this@App)
+            modules(dataModule, interactorModule, repositoryModule, viewModelModule)
+        }
+
+        val isDarkTheme: IsDarkThemeInteractor by inject()
+        switchTheme(isDarkTheme.getIsNightTheme())
+
     }
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
