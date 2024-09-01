@@ -11,9 +11,6 @@ import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
-const val THEME_KEY = "key_for_theme"
-const val SP_PLAYLIST = "playlist_preferences"
-
 class App: Application() {
 
     var darkTheme = false
