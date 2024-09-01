@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.example.playlistmaker"
         minSdk = 29
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -34,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -49,6 +52,7 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.14.2")
     implementation ("com.squareup.retrofit2:retrofit:2.11.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation ("io.insert-koin:koin-android:3.3.0")
 
 }
 
