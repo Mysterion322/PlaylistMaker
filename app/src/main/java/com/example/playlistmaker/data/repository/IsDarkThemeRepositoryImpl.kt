@@ -1,8 +1,8 @@
 package com.example.playlistmaker.data.repository
 
 import android.content.SharedPreferences
-import com.example.playlistmaker.THEME_KEY
 import com.example.playlistmaker.domain.api.IsDarkThemeRepository
+import com.example.playlistmaker.presentation.THEME_KEY
 
 class IsDarkThemeRepositoryImpl (private val sharedPref: SharedPreferences): IsDarkThemeRepository {
     private var darkTheme = false

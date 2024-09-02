@@ -2,10 +2,10 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.playlistmaker.SP_PLAYLIST
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.network.TrackAPI
+import com.example.playlistmaker.presentation.SP_PLAYLIST
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
