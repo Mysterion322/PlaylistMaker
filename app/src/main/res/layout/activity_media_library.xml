@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/title_indent"
         android:background="?attr/colorOnPrimarySurface">
 
         <ImageView
@@ -27,7 +27,7 @@
         android:fontFamily="@font/ys_display_medium"
         android:textSize="@dimen/audio_text"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/tablayout_height"
         android:background="?attr/colorOnPrimarySurface"
         app:tabIndicatorColor="?attr/colorPrimary"
         app:tabMode="fixed"

@@ -14,7 +14,7 @@ class FeaturedTracksFragment : Fragment() {
     private var _binding: FragmentFeaturedTracksBinding? = null
     private val binding get() = _binding!!
 
-    //private val featuredTracksViewModel: FeaturedTracksFragmentViewModel by viewModel()
+    private val featuredTracksViewModel: FeaturedTracksFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

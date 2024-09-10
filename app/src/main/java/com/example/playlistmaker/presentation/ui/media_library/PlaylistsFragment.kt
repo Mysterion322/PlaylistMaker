@@ -15,7 +15,7 @@ class PlaylistsFragment : Fragment() {
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
 
-  //  private val playlistViewModel: PlaylistsFragmentViewModel by viewModel()
+    private val playlistViewModel: PlaylistsFragmentViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

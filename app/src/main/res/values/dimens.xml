@@ -23,6 +23,7 @@
     <dimen name="error_button_radius">54dp</dimen>
     <dimen name="api_image_radius">10dp</dimen>
     <dimen name="media_library_not_found_iv_margin">102dp</dimen>
+    <dimen name="tablayout_height">48dp</dimen>
 
 
 </resources>
