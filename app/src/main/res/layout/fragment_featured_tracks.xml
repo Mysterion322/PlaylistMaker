@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/media_favorites"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/colorOnPrimarySurface">
+
+    <ImageView
+        android:id="@+id/placeholder_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/media_library_not_found_iv_margin"
+        android:contentDescription="@string/empty_featured_tracks"
+        android:src="@drawable/notfound"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/placeholder_text"
+        style="@style/ErrorSearchText"
+        android:text="@string/empty_featured_tracks" />
+
+
+</LinearLayout>

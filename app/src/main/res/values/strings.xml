@@ -26,5 +26,10 @@
     <string name="country">Страна</string>
     <string name="album">Альбом</string>
     <string name="search_internet_error">Загрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="featured_tracks">Избранные треки</string>
+    <string name="playlists">Плейлисты</string>
+    <string name="empty_featured_tracks">Ваша медиатека пуста</string>
+    <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
+
 
 </resources>
