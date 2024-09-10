@@ -8,13 +8,11 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MediaLibraryActivity : AppCompatActivity() {
 
-    private var _binding: ActivityMediaLibraryBinding? = null
-    private val binding get() = _binding!!
+    private val binding by lazy { ActivityMediaLibraryBinding.inflate(layoutInflater) }
     private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityMediaLibraryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.backMediaLibraryImage.setOnClickListener {
@@ -35,7 +33,6 @@ class MediaLibraryActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         tabMediator.detach()
-        _binding = null
     }
 
 }
