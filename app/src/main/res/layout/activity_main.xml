@@ -1,57 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorOnPrimaryFixedVariant"
-    android:orientation="vertical">
+    android:background="?attr/colorOnPrimarySurface">
 
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"/>
 
-    <FrameLayout style="@style/TitleLayoutStyle">
-
-        <TextView
-            style="@style/TitleText"
-            android:paddingLeft="@dimen/indent_normal"
-            android:text="@string/main_name"
-            android:textColor="@color/white" />
-    </FrameLayout>
-
-    <FrameLayout
+    <View
+        android:id="@+id/bottom_divider"
+        android:background="?attr/colorOnPrimaryFixed"
         android:layout_width="match_parent"
-        android:layout_height="8dp"></FrameLayout>
+        android:layout_height="0.5dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <FrameLayout style="@style/MainButtonLayoutStyle">
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav_view"
+        app:itemIconTint="@drawable/bottom_nav_colors"
+        app:itemTextColor="@drawable/bottom_nav_colors"
+        app:itemBackground="?attr/colorOnPrimarySurface"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/title_indent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:itemTextAppearanceActive="@style/BottomNavigationTextAppearance"
+        app:itemTextAppearanceInactive="@style/BottomNavigationTextAppearance"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:itemIconSize="@dimen/nav_icon_size"
+        app:itemPaddingTop="@dimen/nav_icon_padding"
+        app:itemPaddingBottom="@dimen/nav_icon_padding"
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemActiveIndicatorStyle="@style/Widget.Design.BottomNavigationView"/>
 
-        <Button
-            android:id="@+id/button_search"
-            style="@style/MainButtonStyle"
-            android:text="@string/search"
-            app:icon="@drawable/search" />
-
-    </FrameLayout>
-
-    <FrameLayout style="@style/MainButtonLayoutStyle">
-
-        <Button
-            android:id="@+id/button_media"
-            style="@style/MainButtonStyle"
-            android:text="@string/media_library"
-            app:icon="@drawable/library" />
-
-    </FrameLayout>
-
-    <FrameLayout style="@style/MainButtonLayoutStyle">
-
-        <Button
-            android:id="@+id/button_settings"
-            style="@style/MainButtonStyle"
-            android:text="@string/settings"
-            app:icon="@drawable/settings" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/indent_layout"></FrameLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

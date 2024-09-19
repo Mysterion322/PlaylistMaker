@@ -1,35 +1,31 @@
 package com.example.playlistmaker.presentation.ui.main
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.playlistmaker.presentation.ui.media_library.MediaLibraryActivity
+import androidx.fragment.app.commit
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.presentation.ui.search.SearchActivity
-import com.example.playlistmaker.presentation.ui.settings.SettingsActivity
+import com.example.playlistmaker.presentation.ui.search.SearchFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.buttonSearch.setOnClickListener {
-            val displayIntent = Intent(this, SearchActivity::class.java)
-            startActivity(displayIntent)
-        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
 
-        binding.buttonMedia.setOnClickListener {
-            val displayIntent = Intent(this, MediaLibraryActivity::class.java)
-            startActivity(displayIntent)
-        }
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
+        NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
-        binding.buttonSettings.setOnClickListener {
-            val displayIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(displayIntent)
-        }
     }
 
 }

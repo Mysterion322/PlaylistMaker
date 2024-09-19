@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
-import com.example.playlistmaker.presentation.ui.search.SearchActivity
+import com.example.playlistmaker.presentation.ui.search.SearchFragment
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.view_models.AudioPlayerViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,7 +20,7 @@ class AudioPlayerActivity : AppCompatActivity() {
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private val binding by lazy { ActivityAudioPlayerBinding.inflate(layoutInflater) }
-    private val track by lazy { intent.getParcelableExtra(SearchActivity.INTENT_TRACK_KEY) as? Track }
+    private val track by lazy { intent.getParcelableExtra(SearchFragment.INTENT_TRACK_KEY) as? Track }
     private val viewModel: AudioPlayerViewModel by viewModel {
         parametersOf(track?.previewUrl)
     }
@@ -33,7 +33,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val track = intent.getParcelableExtra(SearchActivity.INTENT_TRACK_KEY) as? Track
+        val track = intent.getParcelableExtra(SearchFragment.INTENT_TRACK_KEY) as? Track
 
         track?.let {
         Glide.with(this)

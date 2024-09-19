@@ -24,6 +24,8 @@
     <dimen name="api_image_radius">10dp</dimen>
     <dimen name="media_library_not_found_iv_margin">102dp</dimen>
     <dimen name="tablayout_height">48dp</dimen>
+    <dimen name="nav_icon_size">24dp</dimen>
+    <dimen name="nav_icon_padding">10dp</dimen>
 
 
 </resources>

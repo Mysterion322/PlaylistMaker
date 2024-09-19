@@ -3,28 +3,41 @@ package com.example.playlistmaker.presentation.ui.settings
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.presentation.view_models.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
 
-    private val binding by lazy { ActivitySettingsBinding.inflate(layoutInflater) }
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<SettingsViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        val context = applicationContext
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        binding.backSettingsImage.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val context = requireContext()
 
         val stringValueShare = context.getString(R.string.uri_share)
 
@@ -60,10 +73,9 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.switchDarkTheme.isChecked = viewModel.observeThemeState().value ?: false
         binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+            (requireActivity().application as App).switchTheme(isChecked)
             viewModel.updateThemeState(isChecked)
         }
-
 
     }
 

@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.ui.search
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,21 +7,25 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayerActivity
 import com.example.playlistmaker.presentation.view_models.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
-    private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
@@ -32,35 +35,44 @@ class SearchActivity : AppCompatActivity() {
         TrackAdapter(trackList) { track ->
             if (clickDebounce()) {
                 viewModel.addToHistory(track)
-                val audioPlayerIntent = Intent(this, AudioPlayerActivity::class.java)
+                val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
                 startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
             } } }
     private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter(mutableListOf())
     { track ->
         if (clickDebounce()) {
             viewModel.addToHistory(track)
-            val audioPlayerIntent = Intent(this, AudioPlayerActivity::class.java)
+            val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
             startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
         }}  }
 
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        viewModel.observeSearchState().observe(this) { state ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.searchEditText.setText(savedInstanceState?.getString(KEY, EMPTY))
+
+        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             renderState(state)
         }
         binding.rvTrackList.adapter = trackAdapter
         binding.rvTrackList.layoutManager = LinearLayoutManager(
-            this@SearchActivity,
+            requireContext(),
             LinearLayoutManager.VERTICAL,
             false
         )
         binding.rvHistoryTrackList.adapter = trackAdapterHistory
         binding.rvHistoryTrackList.layoutManager = LinearLayoutManager(
-            this@SearchActivity,
+            requireContext(),
             LinearLayoutManager.VERTICAL,
             false
         )
@@ -76,7 +88,7 @@ class SearchActivity : AppCompatActivity() {
             trackAdapterHistory.notifyDataSetChanged()
             binding.llNotFound.isVisible = false
             binding.llNoInternet.isVisible = false
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         }
 
@@ -105,10 +117,6 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        binding.backSearchImage.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
         binding.updateButton.setOnClickListener {
             if(clickDebounce()) {
                 viewModel.searchRequest(text)
@@ -130,6 +138,12 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
@@ -143,12 +157,6 @@ class SearchActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
 
         outState.putString(KEY, binding.searchEditText.text.toString())
-    }
-
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        binding.searchEditText.setText(savedInstanceState.getString(KEY, EMPTY))
     }
 
     private fun renderState(state: SearchState) {
@@ -215,7 +223,7 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.isVisible = false
         binding.llNoInternet.isVisible = true
         if (additionalMessage.isNotEmpty()) {
-            Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG)
                 .show()
         }
     }

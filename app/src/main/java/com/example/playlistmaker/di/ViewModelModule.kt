@@ -2,6 +2,8 @@ package com.example.playlistmaker.di
 
 import com.example.playlistmaker.domain.api.AudioInteractor
 import com.example.playlistmaker.presentation.view_models.AudioPlayerViewModel
+import com.example.playlistmaker.presentation.view_models.FeaturedTracksFragmentViewModel
+import com.example.playlistmaker.presentation.view_models.PlaylistsFragmentViewModel
 import com.example.playlistmaker.presentation.view_models.SearchViewModel
 import com.example.playlistmaker.presentation.view_models.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -22,6 +24,14 @@ val viewModelModule = module {
         AudioPlayerViewModel(
             trackPlayerInteractor = get<AudioInteractor>(parameters = { parametersOf(url) }),
         )
+    }
+
+    viewModel{
+        FeaturedTracksFragmentViewModel()
+    }
+
+    viewModel{
+        PlaylistsFragmentViewModel()
     }
 
 

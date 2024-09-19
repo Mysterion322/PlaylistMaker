@@ -5,20 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorOnPrimarySurface"
-    tools:context=".presentation.ui.settings.SettingsActivity">
+    tools:context=".presentation.ui.settings.SettingsFragment">
 
     <LinearLayout
         style="@style/TitleLayoutStyle"
-        tools:context=".presentation.ui.settings.SettingsActivity">
-
-        <ImageView
-            android:id="@+id/back_settings_image"
-            style="@style/BackImageStyle" />
+        tools:context=".presentation.ui.settings.SettingsFragment">
 
         <TextView
             style="@style/TitleText"
-            android:text="@string/settings" />
+            android:text="@string/settings"
+            android:paddingStart="@dimen/indent_normal"/>
 
     </LinearLayout>
 
