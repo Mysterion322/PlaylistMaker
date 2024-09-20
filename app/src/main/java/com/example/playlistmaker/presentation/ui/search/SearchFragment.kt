@@ -205,7 +205,7 @@ class SearchFragment : Fragment() {
             trackAdapterHistory.items.addAll(sdata.data)
         }
         trackAdapterHistory.notifyDataSetChanged()
-        showHistory()
+       // showHistory()
     }
 
     private fun showEmptyView() {
