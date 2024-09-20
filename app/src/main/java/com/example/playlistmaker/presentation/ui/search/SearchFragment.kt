@@ -59,7 +59,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.searchEditText.setText(savedInstanceState?.getString(KEY, EMPTY))
+        text=savedInstanceState?.getString(KEY, EMPTY) ?: EMPTY
+        binding.searchEditText.setText(text)
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             renderState(state)
@@ -79,6 +80,9 @@ class SearchFragment : Fragment() {
 
         if(text.isEmpty()&&trackAdapterHistory.itemCount!=0){
             binding.llHistorySearch.isVisible = false
+        }
+        if(text.isNotEmpty()&&trackAdapter.itemCount==0){
+            viewModel.searchRequest(text)
         }
 
         binding.ivClearEditText.setOnClickListener {
