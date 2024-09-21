@@ -4,18 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorOnPrimarySurface"
     android:orientation="vertical"
-    tools:context=".presentation.ui.search.SearchActivity">
+    tools:context=".presentation.ui.search.SearchFragment">
 
     <LinearLayout style="@style/TitleLayoutStyle">
 
-        <ImageView
-            android:id="@+id/back_search_image"
-            style="@style/BackImageStyle" />
-
         <TextView
             style="@style/TitleText"
+            android:paddingStart="@dimen/indent_normal"
             android:text="@string/search" />
 
     </LinearLayout>

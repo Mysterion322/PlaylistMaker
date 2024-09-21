@@ -5,21 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/colorOnPrimarySurface"
-    tools:context=".presentation.ui.media_library.MediaLibraryActivity">
+    tools:context=".presentation.ui.media_library.MediaLibraryFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_indent"
-        android:background="?attr/colorOnPrimarySurface">
-
-        <ImageView
-            android:id="@+id/back_media_library_image"
-            style="@style/BackImageStyle" />
+        android:layout_height="@dimen/title_indent">
 
         <TextView
             style="@style/TitleText"
-            android:text="@string/media_library" />
+            android:text="@string/media_library"
+            android:paddingStart="@dimen/indent_normal"/>
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
