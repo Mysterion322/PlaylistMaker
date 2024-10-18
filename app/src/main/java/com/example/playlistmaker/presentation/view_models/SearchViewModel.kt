@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.view_models
 
 import android.app.Application
-import android.os.SystemClock
 import android.provider.Settings.Global.getString
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -10,17 +9,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
-import com.example.playlistmaker.domain.models.Resource
 import com.example.playlistmaker.domain.models.SearchResult
-import com.example.playlistmaker.presentation.ui.search.SearchState
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.debounce
+import com.example.playlistmaker.presentation.ui.search.SearchState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class SearchViewModel( application: Application,
-                       private val trackInteractor: TrackInteractor,
-                       private val searchHistorySaver: SearchHistoryInteractor
+class SearchViewModel(
+    application: Application,
+    private val trackInteractor: TrackInteractor,
+    private val searchHistorySaver: SearchHistoryInteractor
 ) : AndroidViewModel(application) {
 
     private var latestSearchText: String = ""

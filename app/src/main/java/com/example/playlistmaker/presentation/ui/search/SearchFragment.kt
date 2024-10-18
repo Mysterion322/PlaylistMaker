@@ -3,8 +3,6 @@ package com.example.playlistmaker.presentation.ui.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -34,9 +32,12 @@ class SearchFragment : Fragment() {
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
     private val trackAdapter: TrackAdapter by lazy {
-        TrackAdapter(trackList) { track -> onTrackClickDebounce(track) } }
-    private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter(mutableListOf())
-    { track -> onTrackClickDebounce(track)}  }
+        TrackAdapter(trackList) { track -> onTrackClickDebounce(track) }
+    }
+    private val trackAdapterHistory: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf())
+        { track -> onTrackClickDebounce(track) }
+    }
 
 
     override fun onCreateView(
@@ -75,7 +76,7 @@ class SearchFragment : Fragment() {
             renderState(state)
         }
 
-        if(text.isEmpty()&&trackAdapterHistory.itemCount!=0){
+        if (text.isEmpty() && trackAdapterHistory.itemCount != 0) {
             binding.llHistorySearch.isVisible = false
         }
 
@@ -86,7 +87,8 @@ class SearchFragment : Fragment() {
             trackAdapterHistory.notifyDataSetChanged()
             binding.llNotFound.isVisible = false
             binding.llNoInternet.isVisible = false
-            val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         }
 
@@ -109,14 +111,15 @@ class SearchFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
 
-                binding.llHistorySearch.isVisible = text.isEmpty()&&trackAdapterHistory.itemCount!=0
+                binding.llHistorySearch.isVisible =
+                    text.isEmpty() && trackAdapterHistory.itemCount != 0
 
                 // Здесь можно добавить любой нужный код после изменения текста
             }
         })
 
         binding.updateButton.setOnClickListener {
-                viewModel.searchRequest(text)
+            viewModel.searchRequest(text)
         }
 
         binding.clearHistoryButton.setOnClickListener {
@@ -163,7 +166,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if(text.isEmpty()){return}
+        if (text.isEmpty()) {
+            return
+        }
         binding.progressBar.isVisible = isLoading
     }
 
@@ -197,7 +202,7 @@ class SearchFragment : Fragment() {
             trackAdapterHistory.items.addAll(sdata.data)
         }
         trackAdapterHistory.notifyDataSetChanged()
-       // showHistory()
+        // showHistory()
     }
 
     private fun showEmptyView() {

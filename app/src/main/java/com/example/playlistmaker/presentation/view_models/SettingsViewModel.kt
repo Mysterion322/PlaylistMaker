@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.api.IsDarkThemeInteractor
 
-class SettingsViewModel (private val isDarkThemeInteractor: IsDarkThemeInteractor) : ViewModel() {
+class SettingsViewModel(private val isDarkThemeInteractor: IsDarkThemeInteractor) : ViewModel() {
 
     private val isNightThemeValue = MutableLiveData(isDarkThemeInteractor.getIsNightTheme())
     fun updateThemeState(isNightTheme: Boolean) {

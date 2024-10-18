@@ -9,16 +9,16 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
 
-class TrackHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TrackHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val ivTrack: ImageView = itemView.findViewById(R.id.iv_track)
     private val tvTrackName: TextView = itemView.findViewById(R.id.tv_track_name)
     private val tvTrackArtist: TextView = itemView.findViewById(R.id.tv_track_artist)
-  // private val ivTermsOfUse: ImageView = itemView.findViewById(R.id.iv_terms_of_use)
+    // private val ivTermsOfUse: ImageView = itemView.findViewById(R.id.iv_terms_of_use)
 
     fun bind(item: Track) {
         tvTrackName.text = item.trackName
-        tvTrackArtist.text = item.artistName+" • "+ item.trackTime
+        tvTrackArtist.text = item.artistName + " • " + item.trackTime
         Glide.with(itemView)
             .load(item.artworkUrl100)
             .placeholder(R.drawable.placeholder)
