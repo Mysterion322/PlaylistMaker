@@ -1,12 +1,14 @@
 package com.example.playlistmaker.presentation.view_models
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.AudioInteractor
 import com.example.playlistmaker.presentation.ui.audio_player.PlayingState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AudioPlayerViewModel(
     private val trackPlayerInteractor: AudioInteractor,
@@ -17,10 +19,21 @@ class AudioPlayerViewModel(
     fun observePlayingState(): LiveData<PlayingState> = playingState
     fun observePositionState(): LiveData<Int> = positionState
 
+    private var updateJob: Job? = null
+
+    private fun startTimerCoroutine() {
+        updateJob = viewModelScope.launch {
+            while (true) {
+                positionState.value = trackPlayerInteractor.getCurrentAudioPosition()
+                delay(TIMER_UPDATE_DELAY)
+            }
+        }
+    }
+
     private fun onPlay() {
         trackPlayerInteractor.startAudioPlayer()
         playingState.postValue(PlayingState.Playing)
-        startTimer()
+        startTimerCoroutine()
     }
 
     fun onPause() {
@@ -38,24 +51,8 @@ class AudioPlayerViewModel(
         else onPlay()
     }
 
-    private val handler = Handler(Looper.getMainLooper())
-    private val timerRunnable by lazy {
-        object : Runnable {
-            override fun run() {
-                if (playingState.value == PlayingState.Playing) {
-                    positionState.postValue(trackPlayerInteractor.getCurrentAudioPosition())
-                    handler.postDelayed(this, TIMER_UPDATE_DELAY)
-                }
-            }
-        }
-    }
-
-    private fun startTimer() {
-        handler.post(timerRunnable)
-    }
-
     private fun pauseTimer() {
-        handler.removeCallbacks(timerRunnable)
+        updateJob?.cancel()
     }
 
     override fun onCleared() {
@@ -65,7 +62,7 @@ class AudioPlayerViewModel(
     }
 
     companion object {
-        private const val TIMER_UPDATE_DELAY = 250L
+        private const val TIMER_UPDATE_DELAY = 300L
     }
 
 }

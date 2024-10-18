@@ -15,9 +15,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.debounce
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayerActivity
 import com.example.playlistmaker.presentation.view_models.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,24 +29,14 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
+
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
     private val trackAdapter: TrackAdapter by lazy {
-        TrackAdapter(trackList) { track ->
-            if (clickDebounce()) {
-                viewModel.addToHistory(track)
-                val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
-            } } }
+        TrackAdapter(trackList) { track -> onTrackClickDebounce(track) } }
     private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter(mutableListOf())
-    { track ->
-        if (clickDebounce()) {
-            viewModel.addToHistory(track)
-            val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-            startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
-        }}  }
+    { track -> onTrackClickDebounce(track)}  }
 
 
     override fun onCreateView(
@@ -59,12 +51,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text=savedInstanceState?.getString(KEY, EMPTY) ?: EMPTY
+        text = savedInstanceState?.getString(KEY, EMPTY) ?: EMPTY
         binding.searchEditText.setText(text)
 
-        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
-            renderState(state)
-        }
         binding.rvTrackList.adapter = trackAdapter
         binding.rvTrackList.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -78,11 +67,16 @@ class SearchFragment : Fragment() {
             false
         )
 
+        onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { track -> openPlayer(track) }
+
+        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
+            renderState(state)
+        }
+
         if(text.isEmpty()&&trackAdapterHistory.itemCount!=0){
             binding.llHistorySearch.isVisible = false
-        }
-        if(text.isNotEmpty()&&trackAdapter.itemCount==0){
-            viewModel.searchRequest(text)
         }
 
         binding.ivClearEditText.setOnClickListener {
@@ -122,9 +116,7 @@ class SearchFragment : Fragment() {
         })
 
         binding.updateButton.setOnClickListener {
-            if(clickDebounce()) {
                 viewModel.searchRequest(text)
-            }
         }
 
         binding.clearHistoryButton.setOnClickListener {
@@ -134,7 +126,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE&&clickDebounce()) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.searchRequest(text)
             }
             false
@@ -147,14 +139,10 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
+    private fun openPlayer(track: Track) {
+        viewModel.addToHistory(track)
+        val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+        startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
