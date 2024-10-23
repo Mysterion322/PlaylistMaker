@@ -29,14 +29,25 @@ class SearchFragment : Fragment() {
     private val viewModel by viewModel<SearchViewModel>()
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
+    private var debounceBoolean = true
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
     private val trackAdapter: TrackAdapter by lazy {
-        TrackAdapter(trackList) { track -> onTrackClickDebounce(track) }
+        TrackAdapter(trackList) { track ->
+            if(debounceBoolean){
+            debounceBoolean = false
+            openPlayer(track)
+                onTrackClickDebounce(track)
+        } }
     }
     private val trackAdapterHistory: TrackAdapter by lazy {
         TrackAdapter(mutableListOf())
-        { track -> onTrackClickDebounce(track) }
+        { track ->
+            if(debounceBoolean){
+                debounceBoolean = false
+                openPlayer(track)
+                onTrackClickDebounce(track)
+            } }
     }
 
 
@@ -68,16 +79,16 @@ class SearchFragment : Fragment() {
             false
         )
 
-        onTrackClickDebounce = debounce<Track>(
+        onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
-        ) { track -> openPlayer(track) }
+        ) { track -> changeDebounceBoolean(track) }
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             renderState(state)
         }
 
         if (text.isEmpty() && trackAdapterHistory.itemCount != 0) {
-            binding.llHistorySearch.isVisible = false
+            binding.llHistorySearch.isVisible = true
         }
 
         binding.ivClearEditText.setOnClickListener {
@@ -148,6 +159,10 @@ class SearchFragment : Fragment() {
         startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
     }
 
+    private fun changeDebounceBoolean(track: Track){
+        debounceBoolean = true
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
@@ -189,7 +204,7 @@ class SearchFragment : Fragment() {
 
     private fun showHistory() {
         binding.rvTrackList.isVisible = false
-        binding.llHistorySearch.isVisible = (trackAdapterHistory.itemCount != 0)
+        binding.llHistorySearch.isVisible = true
         binding.llNotFound.isVisible = false
         binding.llNoInternet.isVisible = false
         binding.progressBar.isVisible = false
