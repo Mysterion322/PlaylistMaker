@@ -27,7 +27,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
-    private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private lateinit var onTrackClickDebounce: (Unit) -> Unit
 
     private var debounceBoolean = true
     private var text: String = EMPTY
@@ -37,7 +37,7 @@ class SearchFragment : Fragment() {
             if(debounceBoolean){
             debounceBoolean = false
             openPlayer(track)
-                onTrackClickDebounce(track)
+                onTrackClickDebounce(Unit)
         } }
     }
     private val trackAdapterHistory: TrackAdapter by lazy {
@@ -46,7 +46,7 @@ class SearchFragment : Fragment() {
             if(debounceBoolean){
                 debounceBoolean = false
                 openPlayer(track)
-                onTrackClickDebounce(track)
+                onTrackClickDebounce(Unit)
             } }
     }
 
@@ -81,7 +81,7 @@ class SearchFragment : Fragment() {
 
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
-        ) { track -> changeDebounceBoolean(track) }
+        ) { changeDebounceBoolean() }
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             renderState(state)
@@ -159,7 +159,7 @@ class SearchFragment : Fragment() {
         startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
     }
 
-    private fun changeDebounceBoolean(track: Track){
+    private fun changeDebounceBoolean(){
         debounceBoolean = true
     }
 
