@@ -4,7 +4,7 @@ import android.media.MediaPlayer
 import com.example.playlistmaker.domain.api.AudioRepository
 import com.example.playlistmaker.presentation.ui.audio_player.PlayingState
 
-class AudioRepositoryImpl (val url: String?): AudioRepository {
+class AudioRepositoryImpl(private val url: String?) : AudioRepository {
 
     private val mediaPlayer = MediaPlayer()
     private var state: PlayingState = PlayingState.Default
@@ -39,7 +39,7 @@ class AudioRepositoryImpl (val url: String?): AudioRepository {
         return mediaPlayer.currentPosition
     }
 
-    override fun getState(): PlayingState{
+    override fun getState(): PlayingState {
         return state
     }
 

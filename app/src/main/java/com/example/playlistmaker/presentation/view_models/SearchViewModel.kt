@@ -1,32 +1,38 @@
 package com.example.playlistmaker.presentation.view_models
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
+import android.provider.Settings.Global.getString
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.api.TrackInteractor
-import com.example.playlistmaker.domain.models.Resource
-import com.example.playlistmaker.presentation.ui.search.SearchState
+import com.example.playlistmaker.domain.models.SearchResult
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.debounce
+import com.example.playlistmaker.presentation.ui.search.SearchState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class SearchViewModel( application: Application,
-                       private val trackInteractor: TrackInteractor,
-                       private val searchHistorySaver: SearchHistoryInteractor
+class SearchViewModel(
+    application: Application,
+    private val trackInteractor: TrackInteractor,
+    private val searchHistorySaver: SearchHistoryInteractor
 ) : AndroidViewModel(application) {
 
-    private var latestSearchText: String? = null
+    private var latestSearchText: String = ""
 
-    override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
+    private var searchJob: Job? = null
 
     private val searchState = MutableLiveData<SearchState>()
     fun observeSearchState(): LiveData<SearchState> = searchState
+
+    private val trackSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
+            searchRequest(changedText)
+        }
 
     fun addToHistory(track: Track) {
         searchHistorySaver.addToHistory(track)
@@ -38,76 +44,67 @@ class SearchViewModel( application: Application,
         renderState(SearchState.EmptyHistory)
     }
 
-    private val handler = Handler(Looper.getMainLooper())
 
     private fun renderState(state: SearchState) {
         searchState.postValue(state)
     }
 
     init {
-        val searchHistory = searchHistorySaver.getHistory()
-        if (searchHistory.isEmpty())
-            renderState(SearchState.EmptyHistory)
-        else
-            renderState(SearchState.ContentHistory(searchHistory))
+        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
     }
 
     fun searchRequest(newSearchText: String) {
-        if(newSearchText.isEmpty()){return}
+        if (newSearchText.isEmpty() || newSearchText.length < 2) {
+            return
+        }
         renderState(SearchState.Loading)
-        trackInteractor.search(newSearchText, object : TrackInteractor.TrackConsumer {
-                override fun consume(foundTracks: Resource<List<Track>>) {
-                    when (foundTracks) {
-                        is Resource.Error -> renderState(
-                            SearchState.Error(
-                                errorMessage = getApplication<Application>().getString(
-                                    R.string.search_internet_error
-                                )
-                            )
-                        )
-
-                        is Resource.Success -> {
-                            if (foundTracks.data?.isNotEmpty() == true) {
-                                renderState(SearchState.ContentSearch(foundTracks.data))
-                            } else {
-                                renderState(SearchState.NothingFound)
-                            }
-                        }
-                    }
-                }
-
-                override fun onFailure(t: Throwable) {
-                    renderState(
-                        SearchState.Error(
-                            errorMessage = getApplication<Application>().getString(
-                                R.string.search_internet_error
-                            )
-                        )
+        searchJob = viewModelScope.launch {
+            trackInteractor.search(newSearchText)
+                .collect { result ->
+                    processResult(
+                        result
                     )
                 }
+        }
+    }
 
-            })
+    private fun processResult(searchResult: SearchResult) {
+        when (searchResult) {
+            is SearchResult.Success -> {
+                val tracks = searchResult.tracks
+                if (tracks.isNullOrEmpty()) {
+                    renderState(SearchState.NothingFound)
+                } else if (latestSearchText == searchResult.expression) {
+                    renderState(SearchState.ContentSearch(tracks))
+                }
+            }
+
+            is SearchResult.Error -> {
+                val errorMessage = searchResult.message ?: getString(
+                    getApplication(), R.string.search_internet_error.toString()
+                )
+                renderState(SearchState.Error(errorMessage))
+            }
+
+        }
     }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
+        stopSearch()
+        if (latestSearchText == changedText || changedText.isEmpty() || changedText.length < 2) {
             return
         }
         latestSearchText = changedText
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val searchRunnable = Runnable { searchRequest(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
-        handler.postAtTime(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            postTime,
-        )
+        trackSearchDebounce(changedText)
+    }
+
+    private fun stopSearch() {
+        searchJob?.cancel()
     }
 
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
 
 }

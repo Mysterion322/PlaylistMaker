@@ -12,11 +12,11 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel{
+    viewModel {
         SettingsViewModel(get())
     }
 
-    viewModel{
+    viewModel {
         SearchViewModel(get(), get(), get())
     }
 
@@ -26,11 +26,11 @@ val viewModelModule = module {
         )
     }
 
-    viewModel{
+    viewModel {
         FeaturedTracksFragmentViewModel()
     }
 
-    viewModel{
+    viewModel {
         PlaylistsFragmentViewModel()
     }
 

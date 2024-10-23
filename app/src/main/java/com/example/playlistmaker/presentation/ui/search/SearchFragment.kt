@@ -3,8 +3,6 @@ package com.example.playlistmaker.presentation.ui.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -15,9 +13,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.debounce
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayerActivity
 import com.example.playlistmaker.presentation.view_models.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,24 +27,28 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
-    private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var onTrackClickDebounce: (Unit) -> Unit
+
+    private var debounceBoolean = true
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
     private val trackAdapter: TrackAdapter by lazy {
         TrackAdapter(trackList) { track ->
-            if (clickDebounce()) {
-                viewModel.addToHistory(track)
-                val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-                startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
-            } } }
-    private val trackAdapterHistory: TrackAdapter by lazy { TrackAdapter(mutableListOf())
-    { track ->
-        if (clickDebounce()) {
-            viewModel.addToHistory(track)
-            val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-            startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
-        }}  }
+            if(debounceBoolean){
+            debounceBoolean = false
+            openPlayer(track)
+                onTrackClickDebounce(Unit)
+        } }
+    }
+    private val trackAdapterHistory: TrackAdapter by lazy {
+        TrackAdapter(mutableListOf())
+        { track ->
+            if(debounceBoolean){
+                debounceBoolean = false
+                openPlayer(track)
+                onTrackClickDebounce(Unit)
+            } }
+    }
 
 
     override fun onCreateView(
@@ -59,12 +63,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text=savedInstanceState?.getString(KEY, EMPTY) ?: EMPTY
+        text = savedInstanceState?.getString(KEY, EMPTY) ?: EMPTY
         binding.searchEditText.setText(text)
 
-        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
-            renderState(state)
-        }
         binding.rvTrackList.adapter = trackAdapter
         binding.rvTrackList.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -78,11 +79,16 @@ class SearchFragment : Fragment() {
             false
         )
 
-        if(text.isEmpty()&&trackAdapterHistory.itemCount!=0){
-            binding.llHistorySearch.isVisible = false
+        onTrackClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
+        ) { changeDebounceBoolean() }
+
+        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
+            renderState(state)
         }
-        if(text.isNotEmpty()&&trackAdapter.itemCount==0){
-            viewModel.searchRequest(text)
+
+        if (text.isEmpty() && trackAdapterHistory.itemCount != 0) {
+            binding.llHistorySearch.isVisible = true
         }
 
         binding.ivClearEditText.setOnClickListener {
@@ -92,7 +98,8 @@ class SearchFragment : Fragment() {
             trackAdapterHistory.notifyDataSetChanged()
             binding.llNotFound.isVisible = false
             binding.llNoInternet.isVisible = false
-            val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            val inputMethodManager =
+                requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0)
         }
 
@@ -115,16 +122,15 @@ class SearchFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable?) {
 
-                binding.llHistorySearch.isVisible = text.isEmpty()&&trackAdapterHistory.itemCount!=0
+                binding.llHistorySearch.isVisible =
+                    text.isEmpty() && trackAdapterHistory.itemCount != 0
 
                 // Здесь можно добавить любой нужный код после изменения текста
             }
         })
 
         binding.updateButton.setOnClickListener {
-            if(clickDebounce()) {
-                viewModel.searchRequest(text)
-            }
+            viewModel.searchRequest(text)
         }
 
         binding.clearHistoryButton.setOnClickListener {
@@ -134,7 +140,7 @@ class SearchFragment : Fragment() {
         }
 
         binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE&&clickDebounce()) {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.searchRequest(text)
             }
             false
@@ -147,14 +153,14 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
+    private fun openPlayer(track: Track) {
+        viewModel.addToHistory(track)
+        val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
+        startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
+    }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
+    private fun changeDebounceBoolean(){
+        debounceBoolean = true
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -175,7 +181,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        if(text.isEmpty()){return}
+        if (text.isEmpty()) {
+            return
+        }
         binding.progressBar.isVisible = isLoading
     }
 
@@ -196,7 +204,7 @@ class SearchFragment : Fragment() {
 
     private fun showHistory() {
         binding.rvTrackList.isVisible = false
-        binding.llHistorySearch.isVisible = (trackAdapterHistory.itemCount != 0)
+        binding.llHistorySearch.isVisible = true
         binding.llNotFound.isVisible = false
         binding.llNoInternet.isVisible = false
         binding.progressBar.isVisible = false
@@ -209,7 +217,7 @@ class SearchFragment : Fragment() {
             trackAdapterHistory.items.addAll(sdata.data)
         }
         trackAdapterHistory.notifyDataSetChanged()
-       // showHistory()
+        // showHistory()
     }
 
     private fun showEmptyView() {
