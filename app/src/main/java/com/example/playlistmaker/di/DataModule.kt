@@ -2,7 +2,10 @@ package com.example.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import com.example.playlistmaker.data.NetworkClient
+import com.example.playlistmaker.data.converter.TrackDBConverter
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.network.TrackAPI
 import com.example.playlistmaker.presentation.SP_PLAYLIST
@@ -28,6 +31,14 @@ val dataModule = module {
 
     single<NetworkClient> {
         RetrofitNetworkClient()
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
+    }
+
+    single {
+        TrackDBConverter()
     }
 
 

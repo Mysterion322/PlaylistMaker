@@ -1,10 +1,12 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.repository.AudioRepositoryImpl
+import com.example.playlistmaker.data.repository.FavoritesRepositoryImpl
 import com.example.playlistmaker.data.repository.IsDarkThemeRepositoryImpl
 import com.example.playlistmaker.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.domain.api.AudioRepository
+import com.example.playlistmaker.domain.api.FavoritesRepository
 import com.example.playlistmaker.domain.api.IsDarkThemeRepository
 import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.TrackRepository
@@ -13,11 +15,11 @@ import org.koin.dsl.module
 val repositoryModule = module {
 
     single<TrackRepository> {
-        TrackRepositoryImpl(get())
+        TrackRepositoryImpl(get(), get())
     }
 
     single<SearchHistoryRepository> {
-        SearchHistoryRepositoryImpl(get())
+        SearchHistoryRepositoryImpl(get(), get())
     }
 
     single<IsDarkThemeRepository> {
@@ -26,6 +28,10 @@ val repositoryModule = module {
 
     factory<AudioRepository> {
         AudioRepositoryImpl(get())
+    }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(get(), get())
     }
 
 

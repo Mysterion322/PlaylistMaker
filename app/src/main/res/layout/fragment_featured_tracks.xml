@@ -7,6 +7,13 @@
     android:orientation="vertical"
     android:background="?attr/colorOnPrimarySurface">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/indent_normal"
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/placeholder_image"
         android:layout_width="wrap_content"
@@ -14,12 +21,14 @@
         android:layout_marginTop="@dimen/media_library_not_found_iv_margin"
         android:contentDescription="@string/empty_featured_tracks"
         android:src="@drawable/notfound"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:visibility="visible"/>
 
     <TextView
         android:id="@+id/placeholder_text"
         style="@style/ErrorSearchText"
-        android:text="@string/empty_featured_tracks" />
+        android:text="@string/empty_featured_tracks"
+        android:visibility="visible"/>
 
 
 </LinearLayout>
