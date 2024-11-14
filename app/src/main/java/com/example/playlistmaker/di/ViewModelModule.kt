@@ -23,11 +23,12 @@ val viewModelModule = module {
     viewModel { (url: String) ->
         AudioPlayerViewModel(
             trackPlayerInteractor = get<AudioInteractor>(parameters = { parametersOf(url) }),
+            get()
         )
     }
 
     viewModel {
-        FeaturedTracksFragmentViewModel()
+        FeaturedTracksFragmentViewModel(get())
     }
 
     viewModel {

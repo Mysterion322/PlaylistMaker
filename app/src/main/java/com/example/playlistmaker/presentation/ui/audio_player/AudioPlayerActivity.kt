@@ -29,9 +29,20 @@ class AudioPlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        updateFavoriteState(track?.isFavorite ?: false)
+
         binding.ivBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        binding.ivLike.setOnClickListener {
+            viewModel.onFavoriteClick(track!!)
+        }
+
+        viewModel.observeFavoriteState().observe(this) { state ->
+            updateFavoriteState(state)
+        }
+
 
         val track = intent.getParcelableExtra(SearchFragment.INTENT_TRACK_KEY) as? Track
 
@@ -106,6 +117,14 @@ class AudioPlayerActivity : AppCompatActivity() {
                 )
                 binding.tvTrackTimer.text = "00:00"
             }
+        }
+    }
+
+    private fun updateFavoriteState(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.ivLike.setImageResource(R.drawable.added_like)
+        } else {
+            binding.ivLike.setImageResource(R.drawable.like)
         }
     }
 
