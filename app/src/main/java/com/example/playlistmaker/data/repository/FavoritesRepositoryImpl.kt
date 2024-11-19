@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.repository
 
 import com.example.playlistmaker.data.converter.TrackDBConverter
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.entity.TrackEntity
+import com.example.playlistmaker.data.db.entity.TrackEntity
 import com.example.playlistmaker.domain.api.FavoritesRepository
 import com.example.playlistmaker.domain.models.Track
 import kotlinx.coroutines.flow.Flow

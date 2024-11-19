@@ -6,4 +6,6 @@
     <color name="grey">#AEAFB4</color>
     <color name="search_layout_color">#E6E8EB</color>
     <color name="search_error_image_color">#1A1B22</color>
+    <color name="semi_blue">#9FBBF3</color>
+
 </resources>

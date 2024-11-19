@@ -21,6 +21,14 @@
         android:id="@+id/mediaLibraryFragment"
         android:name="com.example.playlistmaker.presentation.ui.media_library.MediaLibraryFragment"
         android:label="fragment_media_library"
-        tools:layout="@layout/fragment_media_library" />
+        tools:layout="@layout/fragment_media_library" >
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPlaylistFragment"
+        android:name="com.example.playlistmaker.presentation.ui.new_playlist_fragment.NewPlaylistFragment"
+        android:label="NewPlaylistFragment" />
 </navigation>
 

@@ -155,8 +155,7 @@ class SearchFragment : Fragment() {
 
     private fun openPlayer(track: Track) {
         viewModel.addToHistory(track)
-        val audioPlayerIntent = Intent(requireContext(), AudioPlayerActivity::class.java)
-        startActivity(audioPlayerIntent.putExtra(INTENT_TRACK_KEY, track))
+        startActivity(AudioPlayerActivity.newInstance(requireContext(), track))
     }
 
     private fun changeDebounceBoolean(){
