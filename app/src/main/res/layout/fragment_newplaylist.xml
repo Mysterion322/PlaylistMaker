@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/title_indent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         style="@style/TitleText"
-        android:text="@string/new_playlist"
         android:layout_height="@dimen/title_indent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_back"/>
+        android:text="@string/new_playlist"
+        app:layout_constraintStart_toEndOf="@+id/iv_back"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/image"

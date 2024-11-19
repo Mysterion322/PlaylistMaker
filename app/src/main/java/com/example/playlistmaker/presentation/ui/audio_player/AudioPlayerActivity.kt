@@ -35,7 +35,13 @@ class AudioPlayerActivity : AppCompatActivity() {
     private val dateFormat by lazy { SimpleDateFormat(TIME_PATTERN, Locale.getDefault()) }
     private var bottomSheetState = BottomSheetBehavior.STATE_HIDDEN
     private lateinit var onPlaylistClickDebounce: (Playlist) -> Unit
-    private val track by lazy { IntentCompat.getParcelableExtra(intent, TRACK_KEY, Track::class.java) }
+    private val track by lazy {
+        IntentCompat.getParcelableExtra(
+            intent,
+            TRACK_KEY,
+            Track::class.java
+        )
+    }
     private val viewModel: AudioPlayerViewModel by viewModel {
         parametersOf(track?.previewUrl)
     }
@@ -59,30 +65,30 @@ class AudioPlayerActivity : AppCompatActivity() {
             updateFavoriteState(state)
         }
 
-            Glide.with(this)
-                .load(track?.artworkUrl512)
-                .placeholder(R.drawable.placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.api_image_radius)))
-                .into(binding.ivAlbum)
+        Glide.with(this)
+            .load(track?.artworkUrl512)
+            .placeholder(R.drawable.placeholder)
+            .centerCrop()
+            .transform(RoundedCorners(this.resources.getDimensionPixelSize(R.dimen.api_image_radius)))
+            .into(binding.ivAlbum)
 
-            binding.tvMainAlbum.text = track?.trackName
-            binding.tvArtist.text = track?.artistName
-            binding.tvTrackTimeValue.text = track?.trackTime
-            binding.tvAlbumValue.text = track?.trackName
-            if (track?.releaseDate != null) {
-                binding.tvYearValue.text = track!!.releaseDate.substring(0, 4)
-            }
-            if (track?.primaryGenreName != null) {
-                binding.tvGenreValue.text = track!!.primaryGenreName
-            }
-            if (track?.country != null) {
-                binding.tvCountryValue.text = track!!.country
-            }
+        binding.tvMainAlbum.text = track?.trackName
+        binding.tvArtist.text = track?.artistName
+        binding.tvTrackTimeValue.text = track?.trackTime
+        binding.tvAlbumValue.text = track?.trackName
+        if (track?.releaseDate != null) {
+            binding.tvYearValue.text = track!!.releaseDate.substring(0, 4)
+        }
+        if (track?.primaryGenreName != null) {
+            binding.tvGenreValue.text = track!!.primaryGenreName
+        }
+        if (track?.country != null) {
+            binding.tvCountryValue.text = track!!.country
+        }
 
-            binding.ivPlayOrStop.isEnabled = true
+        binding.ivPlayOrStop.isEnabled = true
 
-            viewModel.playingControl()
+        viewModel.playingControl()
 
         viewModel.observePlayingState().observe(this) { state ->
             setPlayButtonImage(state)
@@ -98,107 +104,94 @@ class AudioPlayerActivity : AppCompatActivity() {
         }
 
 
+        val bottomSheetContainer = binding.playlistsBottomSheet
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        bottomSheetBehavior.peekHeight = binding.root.height / 3 * 2
+                    }
 
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
 
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                        viewModel.updatePlaylists()
+                    }
+                }
+            }
 
-            val bottomSheetContainer = binding.playlistsBottomSheet
-            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.overlay.alpha = (slideOffset + 1f) / 2f
+            }
+        })
+
+        binding.ivAdd.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+
+        binding.createPlaylistButton.setOnClickListener {
+            bottomSheetState = bottomSheetBehavior.state
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            bottomSheetBehavior.addBottomSheetCallback(object :
-                BottomSheetBehavior.BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    when (newState) {
-                        BottomSheetBehavior.STATE_COLLAPSED -> {
-                            bottomSheetBehavior.peekHeight = binding.root.height / 3 * 2
-                        }
 
-                        BottomSheetBehavior.STATE_HIDDEN -> {
-                            binding.overlay.visibility = View.GONE
-                        }
+            val fragment = NewPlaylistFragment()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_view, fragment)
+                .addToBackStack(null).commit()
+            binding.playerContent.visibility = View.GONE
+            binding.fragmentView.visibility = View.VISIBLE
+        }
 
-                        else -> {
-                            binding.overlay.visibility = View.VISIBLE
-                            viewModel.updatePlaylists()
-                        }
-                    }
+        supportFragmentManager.setFragmentResultListener(
+            NewPlaylistFragment.RESULT, this
+        ) { _, bundle ->
+            bottomSheetBehavior.state = bottomSheetState
+            binding.playerContent.visibility = View.VISIBLE
+            binding.fragmentView.visibility = View.GONE
+        }
+
+
+        val onItemClickListener = OnItemClickListener { item ->
+            onPlaylistClickDebounce(item)
+        }
+        onPlaylistClickDebounce = debounce(
+            CLICK_DEBOUNCE_DELAY, lifecycleScope, false
+        ) { item ->
+            viewModel.onAddToPlaylistClick(track!!.trackId, item)
+        }
+
+        viewModel.observeAddingToPlaylistState().observe(this) { state ->
+            when (state.isAdded) {
+                true -> {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    Toast.makeText(
+                        this,
+                        getString(R.string.playlist_added).format(state.playlist.name),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                    binding.overlay.alpha = (slideOffset + 1f) / 2f
-                }
-            })
-
-            binding.ivAdd.setOnClickListener {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
-
-            binding.createPlaylistButton.setOnClickListener {
-                bottomSheetState = bottomSheetBehavior.state
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-
-                val fragment = NewPlaylistFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_view, fragment)
-                    .addToBackStack(null).commit()
-                binding.playerContent.visibility = View.GONE
-                binding.fragmentView.visibility = View.VISIBLE
-            }
-
-            supportFragmentManager.setFragmentResultListener(
-                NewPlaylistFragment.RESULT, this
-            ) { _, bundle ->
-                bottomSheetBehavior.state = bottomSheetState
-                binding.playerContent.visibility = View.VISIBLE
-                binding.fragmentView.visibility = View.GONE
-            }
-
-
-
-
-            val onItemClickListener = OnItemClickListener { item ->
-                onPlaylistClickDebounce(item)
-            }
-            onPlaylistClickDebounce = debounce(
-                CLICK_DEBOUNCE_DELAY, lifecycleScope, false
-            ) { item ->
-                viewModel.onAddToPlaylistClick(track!!.trackId, item)
-            }
-
-            viewModel.observeAddingToPlaylistState().observe(this) { state ->
-                when (state.isAdded) {
-                    true -> {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                        Toast.makeText(
-                            this,
-                            getString(R.string.playlist_added).format(state.playlist.name),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                    false -> {
-                        Toast.makeText(
-                            this,
-                            getString(R.string.playlist_not_added).format(state.playlist.name),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                false -> {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.playlist_not_added).format(state.playlist.name),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
+        }
 
-            viewModel.observePlaylists().observe(this) { state ->
-                binding.recyclePlaylistsView.adapter =
-                    PlaylistHorizontalAdapter(state, onItemClickListener)
-            }
-
+        viewModel.observePlaylists().observe(this) { state ->
+            binding.recyclePlaylistsView.adapter =
+                PlaylistHorizontalAdapter(state, onItemClickListener)
+        }
 
 
     }
-
-
-
-
-
-
-
 
 
     override fun onPause() {

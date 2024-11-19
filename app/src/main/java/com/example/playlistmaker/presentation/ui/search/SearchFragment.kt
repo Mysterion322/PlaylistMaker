@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.ui.search
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -34,20 +33,22 @@ class SearchFragment : Fragment() {
     private val trackList = mutableListOf<Track>()
     private val trackAdapter: TrackAdapter by lazy {
         TrackAdapter(trackList) { track ->
-            if(debounceBoolean){
-            debounceBoolean = false
-            openPlayer(track)
+            if (debounceBoolean) {
+                debounceBoolean = false
+                openPlayer(track)
                 onTrackClickDebounce(Unit)
-        } }
+            }
+        }
     }
     private val trackAdapterHistory: TrackAdapter by lazy {
         TrackAdapter(mutableListOf())
         { track ->
-            if(debounceBoolean){
+            if (debounceBoolean) {
                 debounceBoolean = false
                 openPlayer(track)
                 onTrackClickDebounce(Unit)
-            } }
+            }
+        }
     }
 
 
@@ -158,7 +159,7 @@ class SearchFragment : Fragment() {
         startActivity(AudioPlayerActivity.newInstance(requireContext(), track))
     }
 
-    private fun changeDebounceBoolean(){
+    private fun changeDebounceBoolean() {
         debounceBoolean = true
     }
 

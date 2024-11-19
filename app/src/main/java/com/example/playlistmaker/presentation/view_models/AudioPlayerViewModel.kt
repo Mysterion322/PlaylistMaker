@@ -43,11 +43,11 @@ class AudioPlayerViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 favoritesInteractor.removeFromFavorite(track)
             }
-        }else{
-                viewModelScope.launch(Dispatchers.IO) {
-                    favoritesInteractor.addToFavorite(track)
-                }
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                favoritesInteractor.addToFavorite(track)
             }
+        }
 
         favoriteState.postValue(!track.isFavorite)
     }

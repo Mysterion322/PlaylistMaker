@@ -4,7 +4,6 @@ import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,15 +49,21 @@ class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(this, callback)
         binding.btnCreate.isEnabled = false
-        binding.ivBack.setOnClickListener  {
+        binding.ivBack.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
         binding.playlistName.doOnTextChanged { s, _, _, _ ->
             binding.btnCreate.isEnabled = s?.isNotEmpty() == true
-            if(s?.isNotEmpty() == true){
-                binding.btnCreate.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.background_main))
-            }else{
-                binding.btnCreate.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.grey))
+            if (s?.isNotEmpty() == true) {
+                binding.btnCreate.backgroundTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.background_main
+                    )
+                )
+            } else {
+                binding.btnCreate.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.grey))
             }
         }
 

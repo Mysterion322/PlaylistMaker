@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.ui.media_library
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +13,6 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.debounce
 import com.example.playlistmaker.presentation.ui.audio_player.AudioPlayerActivity
 import com.example.playlistmaker.presentation.ui.search.SearchFragment.Companion.CLICK_DEBOUNCE_DELAY
-import com.example.playlistmaker.presentation.ui.search.SearchFragment.Companion.INTENT_TRACK_KEY
 import com.example.playlistmaker.presentation.ui.search.TrackAdapter
 import com.example.playlistmaker.presentation.view_models.FeaturedTracksFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,11 +26,12 @@ class FeaturedTracksFragment : Fragment() {
     private val trackAdapter: TrackAdapter by lazy {
         TrackAdapter(mutableListOf())
         { track ->
-            if(debounceBoolean){
+            if (debounceBoolean) {
                 debounceBoolean = false
                 openPlayer(track)
                 onTrackClickDebounce(Unit)
-            } }
+            }
+        }
     }
 
     private val viewModel: FeaturedTracksFragmentViewModel by viewModel()
@@ -95,7 +94,7 @@ class FeaturedTracksFragment : Fragment() {
         startActivity(AudioPlayerActivity.newInstance(requireContext(), track))
     }
 
-    private fun changeDebounceBoolean(){
+    private fun changeDebounceBoolean() {
         debounceBoolean = true
     }
 
