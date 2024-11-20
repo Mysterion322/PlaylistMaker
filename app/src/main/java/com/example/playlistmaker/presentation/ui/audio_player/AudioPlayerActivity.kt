@@ -139,9 +139,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             bottomSheetState = bottomSheetBehavior.state
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-            val fragment = NewPlaylistFragment()
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_view, fragment)
-                .addToBackStack(null).commit()
+            val fragment = NewPlaylistFragment.newInstance(false)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_view, fragment)
+                .addToBackStack(null)
+                .commit()
             binding.playerContent.visibility = View.GONE
             binding.fragmentView.visibility = View.VISIBLE
         }

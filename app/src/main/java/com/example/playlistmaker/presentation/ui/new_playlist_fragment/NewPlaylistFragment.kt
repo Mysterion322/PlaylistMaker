@@ -47,24 +47,14 @@ class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, callback)
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
         binding.btnCreate.isEnabled = false
         binding.ivBack.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
         binding.playlistName.doOnTextChanged { s, _, _, _ ->
             binding.btnCreate.isEnabled = s?.isNotEmpty() == true
-            if (s?.isNotEmpty() == true) {
-                binding.btnCreate.backgroundTintList = ColorStateList.valueOf(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.background_main
-                    )
-                )
-            } else {
-                binding.btnCreate.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.grey))
-            }
+
         }
 
         val pickMedia =
