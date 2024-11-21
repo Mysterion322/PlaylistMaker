@@ -1,5 +1,7 @@
 package com.example.playlistmaker.presentation
 
+import android.content.Context
+import android.util.TypedValue
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -27,4 +29,10 @@ fun <T> debounce(
             }
         }
     }
+}
+
+fun convertDpToPx(dp: Float, context: Context): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
+    ).toInt()
 }

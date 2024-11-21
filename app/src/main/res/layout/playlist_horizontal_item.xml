@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
+    android:minHeight="60dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/playlist_cover"
+        android:layout_width="@dimen/music_image"
+        android:layout_height="@dimen/music_image"
+        android:layout_gravity="center_vertical"
+        android:layout_marginVertical="@dimen/indent_music"
+        android:layout_marginStart="@dimen/indent_music_card"
+        android:scaleType="fitCenter"
+        tools:srcCompat="@drawable/placeholder" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/indent_music"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/playlist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="start|center_vertical"
+            style="@style/MusicCardText"
+            android:textColor="?attr/colorOnPrimaryFixed"
+            android:textSize="@dimen/text_small"
+            tools:text="[Best of the best]" />
+
+        <TextView
+            android:id="@+id/playlist_tracks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/MusicCardText"
+            android:textColor="?attr/colorOnPrimaryFixed"
+            android:textSize="11sp"
+            tools:text="[322 треков]" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -22,4 +22,26 @@
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker" />
+
+    <style name="Theme.PlaylistMakerSearch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimaryDark">@color/background_main</item>
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryVariant">@color/grey</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/grey</item>
+        <item name="colorSecondaryVariant">@color/search_layout_color</item>
+        <item name="colorOnSecondary">@color/grey</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryDark</item>
+        <!-- Customize your theme here. -->
+        <item name="colorOnPrimaryFixed">@color/search_error_image_color</item>
+        <item name="colorOnPrimaryFixedVariant">@color/background_main</item>
+        <item name="colorOnPrimarySurface">@color/white</item>
+        <item name="colorOnContainer">@color/search_layout_color</item>
+        <item name="colorSecondaryContainer">@color/search_layout_color</item>
+        <item name="toolbarNavigationButtonStyle">@style/TintedNavigation</item>
+    </style>
 </resources>

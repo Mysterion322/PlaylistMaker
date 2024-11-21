@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.AudioInteractor
 import com.example.playlistmaker.domain.api.FavoritesInteractor
+import com.example.playlistmaker.domain.api.PlaylistInteractor
+import com.example.playlistmaker.domain.models.AddToPlaylistState
+import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.ui.audio_player.PlayingState
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +19,7 @@ import kotlinx.coroutines.launch
 class AudioPlayerViewModel(
     private val trackPlayerInteractor: AudioInteractor,
     private val favoritesInteractor: FavoritesInteractor,
+    private val playlistInteractor: PlaylistInteractor,
 ) : ViewModel() {
 
     private val playingState = MutableLiveData<PlayingState>(PlayingState.Default)
@@ -26,6 +30,12 @@ class AudioPlayerViewModel(
     private val favoriteState = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteState
 
+    private val addedToPlaylistState = MutableLiveData<AddToPlaylistState>()
+    fun observeAddingToPlaylistState(): LiveData<AddToPlaylistState> = addedToPlaylistState
+
+    private val playlists = MutableLiveData<List<Playlist>>()
+    fun observePlaylists(): LiveData<List<Playlist>> = playlists
+
     private var updateJob: Job? = null
 
     fun onFavoriteClick(track: Track) {
@@ -33,11 +43,11 @@ class AudioPlayerViewModel(
             viewModelScope.launch(Dispatchers.IO) {
                 favoritesInteractor.removeFromFavorite(track)
             }
-        }else{
-                viewModelScope.launch(Dispatchers.IO) {
-                    favoritesInteractor.addToFavorite(track)
-                }
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                favoritesInteractor.addToFavorite(track)
             }
+        }
 
         favoriteState.postValue(!track.isFavorite)
     }
@@ -75,6 +85,28 @@ class AudioPlayerViewModel(
     private fun pauseTimer() {
         updateJob?.cancel()
     }
+
+    fun onAddToPlaylistClick(trackId: String, playlist: Playlist) {
+        viewModelScope.launch(Dispatchers.IO) {
+            addedToPlaylistState.postValue(
+                AddToPlaylistState(
+                    playlistInteractor.addToPlaylist(
+                        trackId,
+                        playlist.id
+                    ), playlist
+                )
+            )
+        }
+    }
+
+    fun updatePlaylists() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistInteractor.getPlaylists().collect {
+                playlists.postValue(it)
+            }
+        }
+    }
+
 
     override fun onCleared() {
         super.onCleared()
