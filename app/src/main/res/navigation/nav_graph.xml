@@ -25,10 +25,21 @@
         <action
             android:id="@+id/action_mediaLibraryFragment_to_newPlaylistFragment"
             app:destination="@id/newPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playlistViewerFragment"
+            app:destination="@id/playlistViewerFragment" />
     </fragment>
     <fragment
         android:id="@+id/newPlaylistFragment"
         android:name="com.example.playlistmaker.presentation.ui.new_playlist_fragment.NewPlaylistFragment"
         android:label="NewPlaylistFragment" />
+    <fragment
+        android:id="@+id/playlistViewerFragment"
+        android:name="com.example.playlistmaker.presentation.ui.playlist_viewer.PlaylistViewerFragment"
+        android:label="PlaylistViewerFragment" >
+        <action
+            android:id="@+id/action_playlistViewerFragment_to_newPlaylistFragment"
+            app:destination="@id/newPlaylistFragment" />
+    </fragment>
 </navigation>
 

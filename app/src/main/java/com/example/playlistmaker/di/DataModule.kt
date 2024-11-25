@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.converter.PlaylistDBConverter
+import com.example.playlistmaker.data.converter.TrackAtPlaylistDBConverter
 import com.example.playlistmaker.data.converter.TrackDBConverter
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
@@ -44,6 +45,10 @@ val dataModule = module {
 
     single {
         PlaylistDBConverter()
+    }
+
+    single {
+        TrackAtPlaylistDBConverter()
     }
 
 

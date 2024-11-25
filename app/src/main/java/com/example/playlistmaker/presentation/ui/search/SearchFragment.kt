@@ -31,25 +31,8 @@ class SearchFragment : Fragment() {
     private var debounceBoolean = true
     private var text: String = EMPTY
     private val trackList = mutableListOf<Track>()
-    private val trackAdapter: TrackAdapter by lazy {
-        TrackAdapter(trackList) { track ->
-            if (debounceBoolean) {
-                debounceBoolean = false
-                openPlayer(track)
-                onTrackClickDebounce(Unit)
-            }
-        }
-    }
-    private val trackAdapterHistory: TrackAdapter by lazy {
-        TrackAdapter(mutableListOf())
-        { track ->
-            if (debounceBoolean) {
-                debounceBoolean = false
-                openPlayer(track)
-                onTrackClickDebounce(Unit)
-            }
-        }
-    }
+    private lateinit var trackAdapter: TrackAdapter
+    private lateinit var trackAdapterHistory: TrackAdapter
 
 
     override fun onCreateView(
@@ -66,6 +49,17 @@ class SearchFragment : Fragment() {
 
         text = savedInstanceState?.getString(KEY, EMPTY) ?: EMPTY
         binding.searchEditText.setText(text)
+
+        val onItemClickListener = OnItemClickListener { item ->
+            if (debounceBoolean) {
+                debounceBoolean = false
+                openPlayer(item)
+                onTrackClickDebounce(Unit)
+            }
+        }
+        trackAdapter = TrackAdapter(onItemClickListener)
+        trackAdapter.items = trackList
+        trackAdapterHistory = TrackAdapter(onItemClickListener)
 
         binding.rvTrackList.adapter = trackAdapter
         binding.rvTrackList.layoutManager = LinearLayoutManager(

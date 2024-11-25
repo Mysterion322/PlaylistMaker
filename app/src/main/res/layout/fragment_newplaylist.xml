@@ -14,6 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/tv_title"
         style="@style/TitleText"
         android:layout_height="@dimen/title_indent"
         android:text="@string/new_playlist"

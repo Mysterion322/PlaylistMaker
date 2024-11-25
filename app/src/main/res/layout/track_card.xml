@@ -4,6 +4,7 @@
     style="@style/TextLayoutStyle"
     android:paddingStart="@dimen/indent_music_card"
     android:background="?attr/colorOnPrimarySurface"
+    android:id="@+id/playlist_item"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView

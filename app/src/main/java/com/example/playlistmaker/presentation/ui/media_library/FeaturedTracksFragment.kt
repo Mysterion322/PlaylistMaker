@@ -23,16 +23,7 @@ class FeaturedTracksFragment : Fragment() {
     private val binding get() = _binding!!
     private var debounceBoolean = true
     private lateinit var onTrackClickDebounce: (Unit) -> Unit
-    private val trackAdapter: TrackAdapter by lazy {
-        TrackAdapter(mutableListOf())
-        { track ->
-            if (debounceBoolean) {
-                debounceBoolean = false
-                openPlayer(track)
-                onTrackClickDebounce(Unit)
-            }
-        }
-    }
+    private lateinit var trackAdapter: TrackAdapter
 
     private val viewModel: FeaturedTracksFragmentViewModel by viewModel()
 
@@ -51,6 +42,14 @@ class FeaturedTracksFragment : Fragment() {
         onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { changeDebounceBoolean() }
+
+        trackAdapter = TrackAdapter({ item ->
+            if (debounceBoolean) {
+                debounceBoolean = false
+                openPlayer(item)
+                onTrackClickDebounce(Unit)
+            }
+        })
 
         binding.recycleView.adapter = trackAdapter
         binding.recycleView.layoutManager = LinearLayoutManager(

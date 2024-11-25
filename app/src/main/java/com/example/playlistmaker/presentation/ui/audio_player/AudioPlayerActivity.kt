@@ -161,9 +161,9 @@ class AudioPlayerActivity : AppCompatActivity() {
             onPlaylistClickDebounce(item)
         }
         onPlaylistClickDebounce = debounce(
-            CLICK_DEBOUNCE_DELAY, lifecycleScope, false
+            CLICK_DEBOUNCE_DELAY_MILLIS, lifecycleScope, false
         ) { item ->
-            viewModel.onAddToPlaylistClick(track!!.trackId, item)
+            viewModel.onAddToPlaylistClick(track!!, item)
         }
 
         viewModel.observeAddingToPlaylistState().observe(this) { state ->
@@ -240,7 +240,7 @@ class AudioPlayerActivity : AppCompatActivity() {
     companion object {
         private const val TIME_PATTERN = "mm:ss"
         const val TRACK_KEY = "TRACK_KEY"
-        private const val CLICK_DEBOUNCE_DELAY = 300L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 300L
 
         fun newInstance(context: Context, track: Track): Intent {
             return Intent(context, AudioPlayerActivity::class.java).apply {
