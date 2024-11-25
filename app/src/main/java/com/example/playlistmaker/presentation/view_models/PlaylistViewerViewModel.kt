@@ -24,7 +24,7 @@ class PlaylistViewerViewModel(private val interactor: PlaylistInteractor) : View
             interactor.getPlaylistById(playlistId).collect {
                 if (it != null) {
                     interactor.getAllTracks(it.id).collect { tracks ->
-                        allTracks.postValue(tracks)
+                        allTracks.postValue(tracks?.reversed())
                     }
                     playlist.postValue(it)
                 }

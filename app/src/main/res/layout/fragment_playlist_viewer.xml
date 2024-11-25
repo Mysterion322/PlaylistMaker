@@ -186,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/indent_music_card"
-            android:background="?attr/colorOnPrimary"
+            android:background="?attr/colorOnPrimarySurface"
             android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal">
 
@@ -204,7 +204,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:background="?attr/colorOnPrimary"
+                android:background="?attr/colorOnPrimarySurface"
                 android:orientation="vertical">
 
                 <TextView
@@ -234,7 +234,7 @@
             android:id="@+id/share"
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:layout_marginStart="@dimen/indent_normal"
+            android:paddingHorizontal="@dimen/indent_normal"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center_vertical"
@@ -246,7 +246,7 @@
             android:id="@+id/edit_playlist"
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:layout_marginStart="@dimen/indent_normal"
+            android:paddingHorizontal="@dimen/indent_normal"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center_vertical"
@@ -258,7 +258,7 @@
             android:id="@+id/delete_playlist"
             android:layout_width="match_parent"
             android:layout_height="62dp"
-            android:layout_marginStart="@dimen/indent_normal"
+            android:paddingHorizontal="@dimen/indent_normal"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="center_vertical"
