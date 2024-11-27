@@ -41,7 +41,6 @@ class SearchViewModel(
 
     fun clearHistory() {
         searchHistorySaver.clearHistory()
-        renderState(SearchState.EmptyHistory)
     }
 
     fun updateHistory() {
@@ -105,8 +104,12 @@ class SearchViewModel(
         trackSearchDebounce(changedText)
     }
 
-    private fun stopSearch() {
+    fun stopSearch() {
         searchJob?.cancel()
+    }
+
+    fun updateSearch() {
+        searchRequest(latestSearchText ?: "")
     }
 
 
