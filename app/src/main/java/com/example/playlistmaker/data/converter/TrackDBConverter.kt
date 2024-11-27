@@ -32,7 +32,8 @@ class TrackDBConverter {
             primaryGenreName = trackEntity.primaryGenreName,
             releaseDate = trackEntity.releaseDate,
             country = trackEntity.country,
-            isFavorite = true
+            isFavorite = true,
+            addedTime = trackEntity.addedAt.toLong()
         )
     }
 }

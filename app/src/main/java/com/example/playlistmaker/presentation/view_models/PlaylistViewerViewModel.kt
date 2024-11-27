@@ -24,7 +24,8 @@ class PlaylistViewerViewModel(private val interactor: PlaylistInteractor) : View
             interactor.getPlaylistById(playlistId).collect {
                 if (it != null) {
                     interactor.getAllTracks(it.id).collect { tracks ->
-                        allTracks.postValue(tracks?.reversed())
+                        val sortedTracks = tracks!!.sortedByDescending { track -> track.addedTime }
+                        allTracks.postValue(sortedTracks)
                     }
                     playlist.postValue(it)
                 }

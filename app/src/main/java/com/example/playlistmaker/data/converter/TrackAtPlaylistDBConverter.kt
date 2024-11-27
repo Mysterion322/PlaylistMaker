@@ -34,7 +34,8 @@ class TrackAtPlaylistDBConverter {
             primaryGenreName = trackEntity.primaryGenreName,
             releaseDate = trackEntity.releaseDate,
             country = trackEntity.country,
-            isFavorite = trackEntity.isFavorite
+            isFavorite = trackEntity.isFavorite,
+            addedTime = trackEntity.addedAt.toLong()
         )
     }
 }
