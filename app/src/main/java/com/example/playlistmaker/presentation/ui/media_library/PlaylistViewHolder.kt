@@ -1,6 +1,5 @@
 package com.example.playlistmaker.presentation.ui.media_library
 
-import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -14,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Playlist
 import com.example.playlistmaker.presentation.convertDpToPx
+import com.example.playlistmaker.presentation.getDefaultCacheImagePath
 import java.io.File
 
 class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -25,8 +25,7 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(playlist: Playlist) {
         if (!playlist.imagePath.isNullOrEmpty()) {
             cover.scaleType = ImageView.ScaleType.CENTER_CROP
-            val filePath =
-                File(itemView.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
+            val filePath = getDefaultCacheImagePath(itemView.context)
             val file = File(filePath, playlist.imagePath)
             Glide.with(itemView)
                 .load(file.toUri())
@@ -52,7 +51,7 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         }
     }
 
-    fun getPluralForm(num: Int): String {
+    private fun getPluralForm(num: Int): String {
         val n = num % 100
         return when {
             n in 11..14 -> itemView.context.getString(R.string.trackss)

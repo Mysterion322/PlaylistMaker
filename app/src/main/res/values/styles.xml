@@ -182,5 +182,10 @@
         <item name="tint">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorOnPrimary">@color/background_main</item>
+        <item name="colorOnSecondary">@color/background_main</item>
+    </style>
+
 
 </resources>

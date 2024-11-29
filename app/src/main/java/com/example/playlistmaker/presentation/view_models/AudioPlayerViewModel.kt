@@ -86,12 +86,12 @@ class AudioPlayerViewModel(
         updateJob?.cancel()
     }
 
-    fun onAddToPlaylistClick(trackId: String, playlist: Playlist) {
+    fun onAddToPlaylistClick(track: Track, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
             addedToPlaylistState.postValue(
                 AddToPlaylistState(
                     playlistInteractor.addToPlaylist(
-                        trackId,
+                        track,
                         playlist.id
                     ), playlist
                 )

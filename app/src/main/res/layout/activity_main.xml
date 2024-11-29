@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"/>
 
     <View
-        android:id="@+id/bottom_divider"
+        android:id="@+id/divider"
         android:background="?attr/colorOnPrimaryFixed"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

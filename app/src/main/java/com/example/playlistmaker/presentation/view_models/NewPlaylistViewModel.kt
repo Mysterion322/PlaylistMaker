@@ -3,10 +3,13 @@ package com.example.playlistmaker.presentation.view_models
 import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Environment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.api.PlaylistInteractor
+import com.example.playlistmaker.domain.models.Playlist
+import com.example.playlistmaker.presentation.getDefaultCacheImagePath
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -17,6 +20,8 @@ class NewPlaylistViewModel(
     private val interactor: PlaylistInteractor,
     private val application: Application,
 ) : ViewModel() {
+    private val playlist = MutableLiveData<Playlist?>()
+    fun observePlaylist(): LiveData<Playlist?> = playlist
 
     fun createPlaylist(
         playlistName: String,
@@ -40,10 +45,37 @@ class NewPlaylistViewModel(
         return result
     }
 
+    fun updatePlaylist(
+        playlistName: String,
+        playlistDescription: String,
+        bitmap: Bitmap,
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val playlistImage = "${UUID.randomUUID()}.png"
+            interactor.updatePlaylist(
+                playlist.value!!.copy(
+                    name = playlistName,
+                    description = playlistDescription,
+                    imagePath = playlistImage
+                )
+            )
+            saveImageToPrivateStorage(bitmap, playlistImage)
+        }
+    }
+
+    fun getPlaylist(playlistId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            interactor.getPlaylistById(playlistId).collect {
+                playlist.postValue(it)
+            }
+        }
+    }
+
+
     private fun saveImageToPrivateStorage(bitmap: Bitmap, fileName: String): Boolean {
         if (fileName.isEmpty()) return false
         val filePath =
-            File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
+            getDefaultCacheImagePath(application)
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
